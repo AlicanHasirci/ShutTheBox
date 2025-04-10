@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 778259d2d9a149158c68eda6f0d24ec5, type: 3}
+  m_Name: TintAndScale
+  m_EditorClassIdentifier: 
+  _graphicColors:
+    Normal: {r: 1, g: 1, b: 1, a: 1}
+    Disabled: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+  _textColors:
+    Normal: {r: 1, g: 1, b: 1, a: 1}
+    Disabled: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+  _scale: {x: 0.95, y: 0.9, z: 1}
+  _duration: 0.075
+  _ease: 1

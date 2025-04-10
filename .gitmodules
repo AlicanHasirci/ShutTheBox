@@ -1,0 +1,3 @@
+[submodule "shut-the-box-client/Packages/gs.revel.library"]
+	path = shut-the-box-client/Packages/gs.revel.library
+	url = git@github.com:Revel-Games/RevelLibrary.git

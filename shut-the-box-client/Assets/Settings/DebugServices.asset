@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3118680e30f490d86ac09c49cbbeee6, type: 3}
+  m_Name: DebugServices
+  m_EditorClassIdentifier: 
+  enabled: 0
+  serviceType: 2
+  _matchModel:
+    Players:
+    - PlayerId: local-player
+      State: 0
+      Tiles: 000000000000000000000000000000000000000000000000000000000000000000000000
+      Roll: -1
+    - PlayerId: other-player
+      State: 0
+      Tiles: 000000000000000000000000000000000000000000000000000000000000000000000000
+      Roll: -1
+    MatchId: test-match
+    TurnTime: 0
+    RoundCount: 1
+    TileCount: 9
+  _playerId: local-player

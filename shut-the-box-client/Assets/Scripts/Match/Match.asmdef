@@ -1,0 +1,23 @@
+{
+    "name": "Match",
+    "rootNamespace": "",
+    "references": [
+        "MessagePipe",
+        "UniTask",
+        "VContainer",
+        "Player",
+        "Revel.SceneManagement",
+        "Revel.UI",
+        "Unity.TextMeshPro",
+        "DOTween.Modules"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
