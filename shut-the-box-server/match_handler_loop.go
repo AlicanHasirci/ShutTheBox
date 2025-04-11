@@ -91,7 +91,7 @@ func (m MatchHandler) processMessages(logger runtime.Logger, dispatcher runtime.
 					// This is a reRoll
 				}
 				player.RollDice(state)
-				if buf, err := m.marshaler.Marshal(&api.Roll{
+				if buf, err := m.marshaler.Marshal(&api.PlayerRoll{
 					PlayerId: player.PlayerId,
 					Roll:     player.Roll,
 				}); err == nil {
@@ -100,7 +100,7 @@ func (m MatchHandler) processMessages(logger runtime.Logger, dispatcher runtime.
 			}
 
 		case api.OpCode_PLAYER_MOVE:
-			move := &api.Move{}
+			move := &api.PlayerMove{}
 			_ = m.unmarshaler.Unmarshal(message.GetData(), move)
 			move.PlayerId = player.PlayerId
 			move.State = player.Toggle(int(move.Index))
@@ -110,7 +110,7 @@ func (m MatchHandler) processMessages(logger runtime.Logger, dispatcher runtime.
 
 		case api.OpCode_PLAYER_CONF:
 			if player.TryConfirm() {
-				if buf, err := m.marshaler.Marshal(&api.Confirm{
+				if buf, err := m.marshaler.Marshal(&api.PlayerConfirm{
 					PlayerId: player.PlayerId,
 					Tiles:    player.Tiles,
 					BoxShut:  player.BoxShut(),

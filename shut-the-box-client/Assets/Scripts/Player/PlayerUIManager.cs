@@ -1,4 +1,5 @@
 using System;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using MessagePipe;
 using Player.Dice;
@@ -87,7 +88,7 @@ namespace Player
             SetPanelVisibility(_failPanel, false);
         }
 
-        private static async void SetPanelVisibility(RectTransform panel, bool visible)
+        private void SetPanelVisibility(RectTransform panel, bool visible)
         {
             if (visible)
             {
@@ -105,8 +106,9 @@ namespace Player
                     return;
                 }
                 DOTween.Kill(panel);
-                await panel.DOAnchorPosY(0, .5f).SetEase(Ease.OutBack).SetId(panel).ToUniTask();
-                panel.gameObject.SetActive(false);
+                panel.DOAnchorPosY(0, .5f).SetEase(Ease.OutBack).SetId(panel)
+                    .OnKill(() => panel.gameObject.SetActive(false))
+                    .OnComplete(() => panel.gameObject.SetActive(false));
             }
         }
     }

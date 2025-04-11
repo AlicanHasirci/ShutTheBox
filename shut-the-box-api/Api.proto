@@ -1,8 +1,7 @@
 syntax = "proto3";
 
-package api;
-
-option go_package = "alican.rocks/shut-the-box/api";
+package Api;
+option go_package = "shut-the-box-server/api";
 
 enum OpCode {
   UNSPECIFIED = 0;

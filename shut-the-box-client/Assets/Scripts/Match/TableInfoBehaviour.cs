@@ -11,9 +11,8 @@ namespace Match
     {
         [SerializeField] 
         private TMP_Text _tableText;
-        
-        [Inject]
-        public IMatchService MatchService { get; set; }
+
+        [Inject] public IMatchService MatchService;
 
         private IDisposable _disposable;
         
