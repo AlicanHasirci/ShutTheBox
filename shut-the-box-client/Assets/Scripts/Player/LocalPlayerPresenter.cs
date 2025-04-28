@@ -70,6 +70,7 @@ namespace Player
                 Model.Tiles[i] = TileState.Shut;
             }
             BoxPublisher.Publish(Model.Tiles);
+            CanConfirm.Value = false;
         }
 
         public void Done()
@@ -79,7 +80,6 @@ namespace Player
 
         protected override void StateReceived(PlayerState state)
         {
-            base.StateReceived(state);
             SetState(state);
         }
 

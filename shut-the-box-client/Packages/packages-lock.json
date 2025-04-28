@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.alicanhasirci.texttween": {
+      "version": "1.0.0-rc2",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://registry.npmjs.org"
+    },
     "com.cysharp.csprojmodifier": {
       "version": "https://github.com/Cysharp/CsprojModifier.git?path=src/CsprojModifier/Assets/CsprojModifier",
       "depth": 0,

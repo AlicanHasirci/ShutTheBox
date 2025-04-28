@@ -24,7 +24,7 @@ namespace Match
 
         private IDisposable _disposable;
         
-        private void Awake()
+        private void Start()
         {
             int lpp = -1;
             for (int i = 0; i < PlayerPresenters.Count; i++)

@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3118680e30f490d86ac09c49cbbeee6, type: 3}
   m_Name: DebugServices
   m_EditorClassIdentifier: 
-  enabled: 0
+  enabled: 1
   serviceType: 2
   _matchModel:
     Players:
     - PlayerId: local-player
       State: 0
-      Tiles: 000000000000000000000000000000000000000000000000000000000000000000000000
-      Roll: -1
+      Tiles: 020000000000000000000000020000000200000002000000000000000000000000000000
+      Roll: 6
     - PlayerId: other-player
       State: 0
       Tiles: 000000000000000000000000000000000000000000000000000000000000000000000000

@@ -24,7 +24,6 @@ type MatchState struct {
 	random          *rand.Rand
 	playerIndex     int
 	readyCount      int
-	roundCount      int
 	joinsInProgress int
 	emptyTicks      int
 	pauseTicks      int
@@ -36,7 +35,6 @@ func NewMatchState(playerCount int) *MatchState {
 		players:     make([]*api.Player, playerCount),
 		rounds:      make([]*api.RoundScore, 0, roundCount),
 		random:      rand.New(rand.NewSource(time.Now().UnixNano())),
-		roundCount:  0,
 		emptyTicks:  0,
 		playerIndex: 0,
 	}

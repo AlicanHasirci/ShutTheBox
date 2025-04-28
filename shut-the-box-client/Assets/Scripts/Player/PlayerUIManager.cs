@@ -1,17 +1,15 @@
-using System;
-using Cysharp.Threading.Tasks;
-using DG.Tweening;
-using MessagePipe;
-using Player.Dice;
-using R3;
-using Revel.UI;
-using Revel.UI.Util;
-using UnityEngine;
-using VContainer;
-using DisposableBag = MessagePipe.DisposableBag;
-
 namespace Player
 {
+    using System;
+    using DG.Tweening;
+    using MessagePipe;
+    using Dice;
+    using R3;
+    using Revel.UI;
+    using UnityEngine;
+    using VContainer;
+    using DisposableBag = MessagePipe.DisposableBag;
+
     public class PlayerUIManager : MonoBehaviour
     {
         [SerializeField]
@@ -43,7 +41,6 @@ namespace Player
 
             _rollPanel.anchoredPosition = Vector2.zero;
             _turnPanel.anchoredPosition = Vector2.zero;
-            _confirmButton.Interactable = false;
 
             Presenter.Ready();
         }

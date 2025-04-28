@@ -9,7 +9,8 @@
         "Revel.SceneManagement",
         "Revel.UI",
         "Unity.TextMeshPro",
-        "DOTween.Modules"
+        "DOTween.Modules",
+        "TextTween"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.alicanhasirci.texttween": "1.0.0-rc2",
     "com.cysharp.csprojmodifier": "https://github.com/Cysharp/CsprojModifier.git?path=src/CsprojModifier/Assets/CsprojModifier",
     "com.cysharp.messagepipe": "https://github.com/Cysharp/MessagePipe.git?path=src/MessagePipe.Unity/Assets/Plugins/MessagePipe",
     "com.cysharp.messagepipe.vcontainer": "https://github.com/Cysharp/MessagePipe.git?path=src/MessagePipe.Unity/Assets/Plugins/MessagePipe.VContainer",
@@ -58,6 +59,14 @@
       "scopes": [
         "jp.hadashikick.vcontainer"
       ]
+    },
+    {
+      "name": "NPM",
+      "url": "https://registry.npmjs.org",
+      "scopes": [
+        "com.alicanhasirci.texttween"
+      ],
+      "overrideBuiltIns": false
     }
   ]
 }

@@ -60,7 +60,7 @@ func (m MatchHandler) matchStarting(logger runtime.Logger, dispatcher runtime.Ma
 	}
 	if state.pauseTicks == roundInterval*tickRate {
 		if buf, err := m.marshaler.Marshal(&api.RoundStart{
-			RoundCount: int32(state.roundCount + 1),
+			RoundCount: int32(len(state.rounds) + 1),
 		}); err == nil {
 			_ = dispatcher.BroadcastMessage(int64(api.OpCode_ROUND_START), buf, nil, nil, true)
 		}
