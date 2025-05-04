@@ -86,7 +86,7 @@ namespace Network
             { 
                 case OpCode.RoundStart:
                     RoundStart roundStart = RoundStart.Parser.ParseFrom(state.State);
-                    _onRoundStart.Publish(roundStart.RoundCount);
+                    _onRoundStart.Publish(roundStart.Interval);
                     break;
                 case OpCode.PlayerTurn:
                     PlayerTurn playerTurn = PlayerTurn.Parser.ParseFrom(state.State);

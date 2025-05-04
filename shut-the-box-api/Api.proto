@@ -4,30 +4,30 @@ package Api;
 option go_package = "shut-the-box-server/api";
 
 enum OpCode {
-  UNSPECIFIED = 0;
-  MATCH_START = 1;
-  MATCH_OVER = 2;
-  ROUND_START = 3;
-  PLAYER_READY = 4;
-  PLAYER_TURN = 5;
-  PLAYER_ROLL = 6;
-  PLAYER_MOVE = 7;
-  PLAYER_CONF = 8;
-  PLAYER_FAIL = 9;
+  UNSPECIFIED   = 0;
+  MATCH_START   = 1;
+  MATCH_OVER    = 2;
+  ROUND_START   = 3;
+  PLAYER_READY  = 4;
+  PLAYER_TURN   = 5;
+  PLAYER_ROLL   = 6;
+  PLAYER_MOVE   = 7;
+  PLAYER_CONF   = 8;
+  PLAYER_FAIL   = 9;
 }
 
 enum TileState {
-  OPEN = 0;
-  TOGGLE = 1;
-  SHUT = 2;
+  OPEN          = 0;
+  TOGGLE        = 1;
+  SHUT          = 2;
 }
 
 enum PlayerState {
-  IDLE = 0;
-  ROLL = 1;
-  PLAY = 2;
-  FAIL = 3;
-  DONE = 4;
+  IDLE          = 0;
+  ROLL          = 1;
+  PLAY          = 2;
+  FAIL          = 3;
+  DONE          = 4;
 }
 
 message MatchStart {
@@ -43,7 +43,8 @@ message MatchOver {
 }
 
 message RoundStart {
-  int32 roundCount = 1;
+  int32 interval = 1;
+  RoundScore score = 2;
 }
 
 message RoundScore {

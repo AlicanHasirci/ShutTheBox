@@ -28,29 +28,30 @@ namespace Api {
             "ASABKAUSEQoJdGlsZUNvdW50GAIgASgFEhAKCHR1cm5UaW1lGAMgASgFEhwK",
             "B3BsYXllcnMYBCADKAsyCy5BcGkuUGxheWVyIjwKCU1hdGNoT3ZlchIOCgZ3",
             "aW5uZXIYASABKAkSHwoGcm91bmRzGAIgAygLMg8uQXBpLlJvdW5kU2NvcmUi",
-            "IAoKUm91bmRTdGFydBISCgpyb3VuZENvdW50GAEgASgFIi0KClJvdW5kU2Nv",
-            "cmUSDwoHcGxheWVycxgBIAMoCRIOCgZzY29yZXMYAiADKAUiHgoKUGxheWVy",
-            "VHVybhIQCghwbGF5ZXJJZBgBIAEoCSIsCgpQbGF5ZXJSb2xsEhAKCHBsYXll",
-            "cklkGAEgASgJEgwKBHJvbGwYAiABKAUiTAoKUGxheWVyTW92ZRIQCghwbGF5",
-            "ZXJJZBgBIAEoCRINCgVpbmRleBgCIAEoBRIdCgVzdGF0ZRgDIAEoDjIOLkFw",
-            "aS5UaWxlU3RhdGUiUQoNUGxheWVyQ29uZmlybRIQCghwbGF5ZXJJZBgBIAEo",
-            "CRIdCgV0aWxlcxgCIAMoDjIOLkFwaS5UaWxlU3RhdGUSDwoHYm94U2h1dBgD",
-            "IAEoCCJoCgZQbGF5ZXISEAoIcGxheWVySWQYASABKAkSHwoFU3RhdGUYAyAB",
-            "KA4yEC5BcGkuUGxheWVyU3RhdGUSDAoEcm9sbBgCIAEoBRIdCgV0aWxlcxgE",
-            "IAMoDjIOLkFwaS5UaWxlU3RhdGUqsgEKBk9wQ29kZRIPCgtVTlNQRUNJRklF",
-            "RBAAEg8KC01BVENIX1NUQVJUEAESDgoKTUFUQ0hfT1ZFUhACEg8KC1JPVU5E",
-            "X1NUQVJUEAMSEAoMUExBWUVSX1JFQURZEAQSDwoLUExBWUVSX1RVUk4QBRIP",
-            "CgtQTEFZRVJfUk9MTBAGEg8KC1BMQVlFUl9NT1ZFEAcSDwoLUExBWUVSX0NP",
-            "TkYQCBIPCgtQTEFZRVJfRkFJTBAJKisKCVRpbGVTdGF0ZRIICgRPUEVOEAAS",
-            "CgoGVE9HR0xFEAESCAoEU0hVVBACKj8KC1BsYXllclN0YXRlEggKBElETEUQ",
-            "ABIICgRST0xMEAESCAoEUExBWRACEggKBEZBSUwQAxIICgRET05FEARCGVoX",
-            "c2h1dC10aGUtYm94LXNlcnZlci9hcGliBnByb3RvMw=="));
+            "PgoKUm91bmRTdGFydBIQCghpbnRlcnZhbBgBIAEoBRIeCgVzY29yZRgCIAEo",
+            "CzIPLkFwaS5Sb3VuZFNjb3JlIi0KClJvdW5kU2NvcmUSDwoHcGxheWVycxgB",
+            "IAMoCRIOCgZzY29yZXMYAiADKAUiHgoKUGxheWVyVHVybhIQCghwbGF5ZXJJ",
+            "ZBgBIAEoCSIsCgpQbGF5ZXJSb2xsEhAKCHBsYXllcklkGAEgASgJEgwKBHJv",
+            "bGwYAiABKAUiTAoKUGxheWVyTW92ZRIQCghwbGF5ZXJJZBgBIAEoCRINCgVp",
+            "bmRleBgCIAEoBRIdCgVzdGF0ZRgDIAEoDjIOLkFwaS5UaWxlU3RhdGUiUQoN",
+            "UGxheWVyQ29uZmlybRIQCghwbGF5ZXJJZBgBIAEoCRIdCgV0aWxlcxgCIAMo",
+            "DjIOLkFwaS5UaWxlU3RhdGUSDwoHYm94U2h1dBgDIAEoCCJoCgZQbGF5ZXIS",
+            "EAoIcGxheWVySWQYASABKAkSHwoFU3RhdGUYAyABKA4yEC5BcGkuUGxheWVy",
+            "U3RhdGUSDAoEcm9sbBgCIAEoBRIdCgV0aWxlcxgEIAMoDjIOLkFwaS5UaWxl",
+            "U3RhdGUqsgEKBk9wQ29kZRIPCgtVTlNQRUNJRklFRBAAEg8KC01BVENIX1NU",
+            "QVJUEAESDgoKTUFUQ0hfT1ZFUhACEg8KC1JPVU5EX1NUQVJUEAMSEAoMUExB",
+            "WUVSX1JFQURZEAQSDwoLUExBWUVSX1RVUk4QBRIPCgtQTEFZRVJfUk9MTBAG",
+            "Eg8KC1BMQVlFUl9NT1ZFEAcSDwoLUExBWUVSX0NPTkYQCBIPCgtQTEFZRVJf",
+            "RkFJTBAJKisKCVRpbGVTdGF0ZRIICgRPUEVOEAASCgoGVE9HR0xFEAESCAoE",
+            "U0hVVBACKj8KC1BsYXllclN0YXRlEggKBElETEUQABIICgRST0xMEAESCAoE",
+            "UExBWRACEggKBEZBSUwQAxIICgRET05FEARCGVoXc2h1dC10aGUtYm94LXNl",
+            "cnZlci9hcGliBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Api.OpCode), typeof(global::Api.TileState), typeof(global::Api.PlayerState), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Api.MatchStart), global::Api.MatchStart.Parser, new[]{ "RoundCount", "TileCount", "TurnTime", "Players" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Api.MatchOver), global::Api.MatchOver.Parser, new[]{ "Winner", "Rounds" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Api.RoundStart), global::Api.RoundStart.Parser, new[]{ "RoundCount" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Api.RoundStart), global::Api.RoundStart.Parser, new[]{ "Interval", "Score" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Api.RoundScore), global::Api.RoundScore.Parser, new[]{ "Players", "Scores" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Api.PlayerTurn), global::Api.PlayerTurn.Parser, new[]{ "PlayerId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Api.PlayerRoll), global::Api.PlayerRoll.Parser, new[]{ "PlayerId", "Roll" }, null, null, null, null),
@@ -650,7 +651,8 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public RoundStart(RoundStart other) : this() {
-      roundCount_ = other.roundCount_;
+      interval_ = other.interval_;
+      score_ = other.score_ != null ? other.score_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -660,15 +662,27 @@ namespace Api {
       return new RoundStart(this);
     }
 
-    /// <summary>Field number for the "roundCount" field.</summary>
-    public const int RoundCountFieldNumber = 1;
-    private int roundCount_;
+    /// <summary>Field number for the "interval" field.</summary>
+    public const int IntervalFieldNumber = 1;
+    private int interval_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int RoundCount {
-      get { return roundCount_; }
+    public int Interval {
+      get { return interval_; }
       set {
-        roundCount_ = value;
+        interval_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "score" field.</summary>
+    public const int ScoreFieldNumber = 2;
+    private global::Api.RoundScore score_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Api.RoundScore Score {
+      get { return score_; }
+      set {
+        score_ = value;
       }
     }
 
@@ -687,7 +701,8 @@ namespace Api {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (RoundCount != other.RoundCount) return false;
+      if (Interval != other.Interval) return false;
+      if (!object.Equals(Score, other.Score)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -695,7 +710,8 @@ namespace Api {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (RoundCount != 0) hash ^= RoundCount.GetHashCode();
+      if (Interval != 0) hash ^= Interval.GetHashCode();
+      if (score_ != null) hash ^= Score.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -714,9 +730,13 @@ namespace Api {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (RoundCount != 0) {
+      if (Interval != 0) {
         output.WriteRawTag(8);
-        output.WriteInt32(RoundCount);
+        output.WriteInt32(Interval);
+      }
+      if (score_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(Score);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -728,9 +748,13 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (RoundCount != 0) {
+      if (Interval != 0) {
         output.WriteRawTag(8);
-        output.WriteInt32(RoundCount);
+        output.WriteInt32(Interval);
+      }
+      if (score_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(Score);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -742,8 +766,11 @@ namespace Api {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (RoundCount != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(RoundCount);
+      if (Interval != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Interval);
+      }
+      if (score_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Score);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -757,8 +784,14 @@ namespace Api {
       if (other == null) {
         return;
       }
-      if (other.RoundCount != 0) {
-        RoundCount = other.RoundCount;
+      if (other.Interval != 0) {
+        Interval = other.Interval;
+      }
+      if (other.score_ != null) {
+        if (score_ == null) {
+          Score = new global::Api.RoundScore();
+        }
+        Score.MergeFrom(other.Score);
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -780,7 +813,14 @@ namespace Api {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            RoundCount = input.ReadInt32();
+            Interval = input.ReadInt32();
+            break;
+          }
+          case 18: {
+            if (score_ == null) {
+              Score = new global::Api.RoundScore();
+            }
+            input.ReadMessage(Score);
             break;
           }
         }
@@ -803,7 +843,14 @@ namespace Api {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 8: {
-            RoundCount = input.ReadInt32();
+            Interval = input.ReadInt32();
+            break;
+          }
+          case 18: {
+            if (score_ == null) {
+              Score = new global::Api.RoundScore();
+            }
+            input.ReadMessage(Score);
             break;
           }
         }

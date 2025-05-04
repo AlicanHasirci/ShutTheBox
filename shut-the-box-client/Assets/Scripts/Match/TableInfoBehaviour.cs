@@ -1,26 +1,19 @@
-using System;
-using DG.Tweening;
-using TMPro;
-using UnityEngine;
-using VContainer;
-using MessagePipe;
-
 namespace Match
 {
+    using System;
+    using DG.Tweening;
+    using TMPro;
+    using UnityEngine;
+    
     public class TableInfoBehaviour : MonoBehaviour
     {
         [SerializeField] 
         private TMP_Text _tableText;
-
-        [Inject] public IMatchService MatchService;
-
+        
         private IDisposable _disposable;
         
         private void Awake()
         {
-            _disposable = DisposableBag.Create(
-                MatchService.OnRoundStart.Subscribe(OnRoundStart)
-            );
             _tableText.color = new Color(1, 1, 1, 0);
         }
 
@@ -29,11 +22,6 @@ namespace Match
             DOTween.Kill(this);
             
             _disposable?.Dispose();
-        }
-
-        private void OnRoundStart(int round)
-        {
-            SetTableInfo($"Round {round}\nStarting..", 5);
         }
 
         public void SetTableInfo(string text, float fade = 0)

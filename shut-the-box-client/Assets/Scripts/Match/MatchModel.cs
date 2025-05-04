@@ -3,6 +3,8 @@ using Player;
 
 namespace Match
 {
+    using System.Collections.Generic;
+
     public enum MatchState
     {
         Idle,
@@ -15,10 +17,23 @@ namespace Match
     [Serializable]
     public class MatchModel
     {
-        public PlayerModel[] Players;
+        public List<PlayerModel> Players;
+        public List<RoundModel> Rounds;
         public string MatchId;
         public float TurnTime;
-        public int RoundCount;
         public int TileCount;
+    }
+
+    [Serializable]
+    public class RoundModel
+    {
+        public IList<string> Players;
+        public IList<int> Scores;
+
+        public RoundModel(IList<string> players, IList<int> scores)
+        {
+            Players = players;
+            Scores = scores;
+        }
     }
 }

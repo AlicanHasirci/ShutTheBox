@@ -4,14 +4,25 @@ using MessagePipe;
 using Player;
 using Revel.SceneManagement;
 using UnityEngine;
-using VContainer;
 
 namespace Match
 {
+    using Cysharp.Threading.Tasks;
+    using Popups;
+    using VContainer;
+    using Revel.UI.Popup;
+    using Utility;
+
     public class MatchManager : MonoBehaviour
     {
+        [SerializeField] 
+        private PopupManager _popupManager;
+        
         [SerializeField]
         private PlayerBehaviour[] _players;
+        
+        [SerializeField] 
+        private TableInfoBehaviour _tableInfo;
 
         [Inject]
         public IReadOnlyList<IPlayerPresenter> PlayerPresenters;
@@ -43,7 +54,8 @@ namespace Match
             }
 
             _disposable = DisposableBag.Create(
-                MatchService.OnMatchState.Subscribe(OnMatchState)
+                MatchService.OnMatchState.Subscribe(OnMatchState),
+                MatchService.OnRoundStart.Subscribe(OnRoundStart)
             );
         }
 
@@ -52,22 +64,25 @@ namespace Match
             _disposable?.Dispose();
         }
 
-        private async void OnMatchState(MatchState state)
+        private void OnMatchState(MatchState state)
         {
-            string topScene = string.Empty;
-            using IEnumerator<string> enumerator = SceneController.Scenes.GetEnumerator();
-            while (enumerator.MoveNext())
+            if (state == MatchState.Idle)
             {
-                topScene = enumerator.Current;
+                InfoPopup.Payload payload = new("Game Over", "Quit", Exit);
+                _popupManager.Show<InfoPopup, InfoPopup.Payload>(payload);
             }
+        }
 
-            await SceneController.UnloadSceneAsync(topScene);
-            await SceneController.LoadSceneAsync("MenuScene");
+        private void OnRoundStart(int interval)
+        {
+            int count = MatchService.Model.Rounds.Count;
+            _tableInfo.SetTableInfo($"Round {count + 1}\nStarting..", interval);
         }
 
         public void Exit()
         {
             MatchService.LeaveMatch();
+            SceneController.ChangeTopScene("MenuScene").Forget();
         }
     }
 }

@@ -19,7 +19,6 @@ namespace Debug
         public ISubscriber<(string, int, TileState)> OnMove { get; private set; }
         public ISubscriber<(string, IReadOnlyList<TileState>)> OnConfirm { get; private set; }
         
-        private IDisposablePublisher<int> _onRoundStart;
         private IDisposablePublisher<string> _onTurn;
         private IDisposablePublisher<(string, int)> _onRoll;
         private IDisposablePublisher<(string, int, TileState)> _onMove;
@@ -38,7 +37,6 @@ namespace Debug
         [Inject]
         public void PlayerServices(EventFactory eventFactory)
         {
-            (_onRoundStart, OnRoundStart) = eventFactory.CreateEvent<int>();
             (_onTurn, OnTurn) = eventFactory.CreateEvent<string>();
             (_onRoll, OnRoll) = eventFactory.CreateEvent<(string, int)>();
             (_onMove, OnMove) = eventFactory.CreateEvent<(string, int, TileState)>();
@@ -48,13 +46,6 @@ namespace Debug
             _disposable = Disposable.Combine(_disposable, _onRoll);
             _disposable = Disposable.Combine(_disposable, _onMove);
             _disposable = Disposable.Combine(_disposable, _onConfirm);
-        }
-
-        [Button(ButtonStyle.FoldoutButton, Name = "Round")]
-        [BoxGroup("Player"), HorizontalGroup("Player/Buttons")]
-        private void PublishRoundStart()
-        {
-            _onRoundStart?.Publish(1);
         }
         
         [Button(ButtonStyle.FoldoutButton, Name = "Turn")]

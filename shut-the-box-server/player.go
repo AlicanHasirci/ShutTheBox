@@ -97,7 +97,7 @@ func (p *Player) HasMoves() bool {
 func (p *Player) GetScore() int {
 	sum := 0
 	for i, tile := range p.Tiles {
-		if tile == api.TileState_OPEN {
+		if tile == api.TileState_SHUT {
 			sum += i + 1
 		}
 	}

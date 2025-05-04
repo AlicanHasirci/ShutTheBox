@@ -59,8 +59,15 @@ func (m MatchHandler) matchStarting(logger runtime.Logger, dispatcher runtime.Ma
 		return
 	}
 	if state.pauseTicks == roundInterval*tickRate {
+		var score *api.RoundScore
+		if len(state.rounds) == 0 {
+			score = nil
+		} else {
+			score = state.rounds[len(state.rounds)-1]
+		}
 		if buf, err := m.marshaler.Marshal(&api.RoundStart{
-			RoundCount: int32(len(state.rounds) + 1),
+			Interval: int32(roundInterval),
+			Score:    score,
 		}); err == nil {
 			_ = dispatcher.BroadcastMessage(int64(api.OpCode_ROUND_START), buf, nil, nil, true)
 		}
@@ -151,6 +158,7 @@ func (m MatchHandler) roundFinished(dispatcher runtime.MatchDispatcher, state *M
 		(*Player)(p).Reset()
 	}
 	if len(state.rounds) == roundCount {
+		state.matchState = Complete
 		if buf, err := m.marshaler.Marshal(&api.MatchOver{
 			Winner: state.players[0].PlayerId, //FIXME
 			Rounds: state.rounds,

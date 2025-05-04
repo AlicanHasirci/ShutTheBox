@@ -10,6 +10,7 @@ using DisposableBag = MessagePipe.DisposableBag;
 using ILogger = Revel.Diagnostics.ILogger;
 namespace Network
 {
+    using System.Collections.Generic;
 
     public class NetworkMatchService : IMatchService, IDisposable
     {
@@ -95,23 +96,24 @@ namespace Network
                     MatchStart match = MatchStart.Parser.ParseFrom(state.State);
                     Model = new MatchModel
                     {
-                        Players = new PlayerModel[match.Players.Count],
+                        Players = new List<PlayerModel>(match.Players.Count),
+                        Rounds = new List<RoundModel>(match.RoundCount),
                         MatchId = state.MatchId,
-                        RoundCount = match.RoundCount,
                         TileCount = match.TileCount,
                         TurnTime = match.TurnTime,
                     };
-                    int i = 0;
+                    
                     foreach (Api.Player player in match.Players)
                     {
-                        Model.Players[i++] = new PlayerModel(player.PlayerId, match.TileCount);
+                        Model.Players.Add(new PlayerModel(player.PlayerId, match.TileCount));
                     }
 
                     _matchState.Publish(MatchState.Waiting);
                     break;
                 case OpCode.RoundStart:
                     RoundStart roundStart = RoundStart.Parser.ParseFrom(state.State);
-                    _roundStart.Publish(roundStart.RoundCount);
+                    Model.Rounds.Add(new RoundModel(roundStart.Score.Players, roundStart.Score.Scores));
+                    _roundStart.Publish(roundStart.Interval);
                     break;
                 case OpCode.MatchOver:
                     _matchState.Publish(MatchState.Idle);

@@ -87,6 +87,7 @@ func (ms *MatchState) GetPlayer(presence runtime.Presence) *Player {
 func (ms *MatchState) GetRoundScore() *api.RoundScore {
 	players := make([]string, len(ms.players))
 	scores := make([]int32, len(ms.players))
+
 	for i, p := range ms.players {
 		players[i] = p.PlayerId
 		scores[i] = int32((*Player)(p).GetScore())

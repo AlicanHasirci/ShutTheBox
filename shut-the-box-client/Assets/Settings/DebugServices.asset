@@ -13,19 +13,19 @@ MonoBehaviour:
   m_Name: DebugServices
   m_EditorClassIdentifier: 
   enabled: 1
-  serviceType: 2
+  serviceType: 1
   _matchModel:
     Players:
     - PlayerId: local-player
       State: 0
-      Tiles: 020000000000000000000000020000000200000002000000000000000000000000000000
-      Roll: 6
+      Tiles: 000000000000000000000000000000000000000000000000000000000000000000000000
+      Roll: -1
     - PlayerId: other-player
       State: 0
       Tiles: 000000000000000000000000000000000000000000000000000000000000000000000000
       Roll: -1
+    Rounds: []
     MatchId: test-match
     TurnTime: 0
-    RoundCount: 1
     TileCount: 9
   _playerId: local-player
