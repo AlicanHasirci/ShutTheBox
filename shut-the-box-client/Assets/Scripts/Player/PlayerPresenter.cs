@@ -5,6 +5,8 @@ using DisposableBag = MessagePipe.DisposableBag;
 
 namespace Player
 {
+    using Network;
+
     public interface IPlayerPresenter
     {
         ISubscriber<PlayerState> OnState { get; }
@@ -31,6 +33,7 @@ namespace Player
         public PlayerPresenter(
             PlayerModel model,
             IPlayerService playerService,
+            IMatchService matchService,
             EventFactory eventFactory
         )
         {
@@ -41,23 +44,24 @@ namespace Player
             Model = model;
             Service = playerService;
             _disposable = DisposableBag.Create(
-                RollPublisher,
+                StatePublisher,
                 BoxPublisher,
-                playerService.OnRoundStart.Subscribe(_ => RoundStartReceived()),
-                playerService.OnTurn.Subscribe(_ => StateReceived(PlayerState.Roll), Filter),
-                playerService.OnRoll.Subscribe(s => RollReceived(s.Item2),s => Filter(s.Item1)),
-                playerService.OnMove.Subscribe(s => MoveReceived(s.Item2, s.Item3),s => Filter(s.Item1)),
-                playerService.OnConfirm.Subscribe(s => BoxReceived(s.Item2), s => Filter(s.Item1))
+                RollPublisher,
+                matchService.OnRoundStart.Subscribe(OnRoundStart),
+                playerService.OnTurn.Subscribe(OnPlayerTurn),
+                playerService.OnRoll.Subscribe(OnPlayerRoll),
+                playerService.OnMove.Subscribe(OnPlayerMove),
+                playerService.OnConfirm.Subscribe(OnPlayerConfirm)
             );
         }
 
         public void Initialize()
         {
-            StateReceived(Model.State);
-            BoxReceived(Model.Tiles);
+            StatePublisher.Publish(Model.State);
+            BoxPublisher.Publish(Model.Tiles);
             if (Model.State is PlayerState.Play)
             {
-                RollReceived(Model.Roll, true);
+                RollPublisher.Publish((Model.Roll, true));
             }
         }
 
@@ -79,43 +83,50 @@ namespace Player
 
         public virtual void TileToggle(int index) { }
 
-        public virtual void RoundStartReceived()
+        private void OnRoundStart(RoundStart roundStart)
         {
             Reset();
-            StateReceived(Model.State);
-            BoxReceived(Model.Tiles);
-        }
-
-        protected virtual void StateReceived(PlayerState state)
-        {
-            StatePublisher.Publish(state);
-        }
-
-        protected virtual void MoveReceived(int index, TileState state)
-        {
-            Model.Tiles[index] = state;
+            StatePublisher.Publish(Model.State);
             BoxPublisher.Publish(Model.Tiles);
         }
 
-        protected virtual void BoxReceived(IReadOnlyList<TileState> tiles)
+        protected virtual void OnPlayerTurn(PlayerTurn playerTurn)
         {
-            for (int i = 0; i < tiles.Count; i++)
+            if (!IsCurrentPlayer(playerTurn.PlayerId))
             {
-                Model.Tiles[i] = tiles[i];
+                return;
             }
+            StatePublisher.Publish(PlayerState.Roll);
+        }
+
+        protected virtual async void OnPlayerRoll(PlayerRoll playerRoll)
+        {
+            if (!IsCurrentPlayer(playerRoll.PlayerId))
+            {
+                return;
+            }
+            Model.Roll = playerRoll.Roll;
+            await RollPublisher.PublishAsync((playerRoll.Roll, true));
+        }
+
+        protected virtual void OnPlayerMove(PlayerMove playerMove)
+        {
+            if (!IsCurrentPlayer(playerMove.PlayerId))
+            {
+                return;
+            }
+            Model.Tiles[playerMove.Index] = (TileState)playerMove.State;
             BoxPublisher.Publish(Model.Tiles);
         }
 
-        protected virtual async void RollReceived(int value, bool skip = false)
+        protected virtual void OnPlayerConfirm(PlayerConfirm playerConfirm)
         {
-            Model.Roll = value;
-            await RollPublisher.PublishAsync((value, skip));
+            throw new NotImplementedException();
         }
 
-        private bool Filter(string playerId)
+        protected bool IsCurrentPlayer(string playerId)
         {
-            return playerId == Model.PlayerId;
+            return string.Equals(playerId, Model.PlayerId);
         }
-        
     }
 }

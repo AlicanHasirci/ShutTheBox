@@ -1,21 +1,22 @@
-using Match;
-using Network;
 using Player;
 using VContainer;
 using VContainer.Unity;
 
 namespace Game
 {
+    using Match;
+    using Network;
+
     public class GameScope : LifetimeScope
     {
         protected override void Configure(IContainerBuilder builder)
         {
-            MatchModel match = Parent.Container.Resolve<IMatchService>().Model;
             string playerId = Parent.Container.Resolve<INetworkService>().PlayerId;
+            MatchModel matchModel = Parent.Container.Resolve<IMatchPresenter>().Model;
+            
+            builder.RegisterInstance(matchModel);
 
-            builder.RegisterInstance(match);
-
-            foreach (PlayerModel player in match.Players)
+            foreach (PlayerModel player in matchModel.Players)
             {
                 RegistrationBuilder registrationBuilder = !playerId.Equals(player.PlayerId)
                     ? builder.Register<PlayerPresenter>(Lifetime.Singleton)

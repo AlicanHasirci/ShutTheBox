@@ -9,7 +9,7 @@ using pb = global::Google.Protobuf;
 using pbc = global::Google.Protobuf.Collections;
 using pbr = global::Google.Protobuf.Reflection;
 using scg = global::System.Collections.Generic;
-namespace Api {
+namespace Network {
 
   /// <summary>Holder for reflection information generated from Api.proto</summary>
   public static partial class ApiReflection {
@@ -44,20 +44,20 @@ namespace Api {
             "Eg8KC1BMQVlFUl9NT1ZFEAcSDwoLUExBWUVSX0NPTkYQCBIPCgtQTEFZRVJf",
             "RkFJTBAJKisKCVRpbGVTdGF0ZRIICgRPUEVOEAASCgoGVE9HR0xFEAESCAoE",
             "U0hVVBACKj8KC1BsYXllclN0YXRlEggKBElETEUQABIICgRST0xMEAESCAoE",
-            "UExBWRACEggKBEZBSUwQAxIICgRET05FEARCGVoXc2h1dC10aGUtYm94LXNl",
-            "cnZlci9hcGliBnByb3RvMw=="));
+            "UExBWRACEggKBEZBSUwQAxIICgRET05FEARCI1oXc2h1dC10aGUtYm94LXNl",
+            "cnZlci9hcGmqAgdOZXR3b3JrYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Api.OpCode), typeof(global::Api.TileState), typeof(global::Api.PlayerState), }, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Api.MatchStart), global::Api.MatchStart.Parser, new[]{ "RoundCount", "TileCount", "TurnTime", "Players" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Api.MatchOver), global::Api.MatchOver.Parser, new[]{ "Winner", "Rounds" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Api.RoundStart), global::Api.RoundStart.Parser, new[]{ "Interval", "Score" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Api.RoundScore), global::Api.RoundScore.Parser, new[]{ "Players", "Scores" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Api.PlayerTurn), global::Api.PlayerTurn.Parser, new[]{ "PlayerId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Api.PlayerRoll), global::Api.PlayerRoll.Parser, new[]{ "PlayerId", "Roll" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Api.PlayerMove), global::Api.PlayerMove.Parser, new[]{ "PlayerId", "Index", "State" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Api.PlayerConfirm), global::Api.PlayerConfirm.Parser, new[]{ "PlayerId", "Tiles", "BoxShut" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Api.Player), global::Api.Player.Parser, new[]{ "PlayerId", "State", "Roll", "Tiles" }, null, null, null, null)
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Network.OpCode), typeof(global::Network.TileState), typeof(global::Network.PlayerState), }, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Network.MatchStart), global::Network.MatchStart.Parser, new[]{ "RoundCount", "TileCount", "TurnTime", "Players" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Network.MatchOver), global::Network.MatchOver.Parser, new[]{ "Winner", "Rounds" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Network.RoundStart), global::Network.RoundStart.Parser, new[]{ "Interval", "Score" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Network.RoundScore), global::Network.RoundScore.Parser, new[]{ "Players", "Scores" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Network.PlayerTurn), global::Network.PlayerTurn.Parser, new[]{ "PlayerId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Network.PlayerRoll), global::Network.PlayerRoll.Parser, new[]{ "PlayerId", "Roll" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Network.PlayerMove), global::Network.PlayerMove.Parser, new[]{ "PlayerId", "Index", "State" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Network.PlayerConfirm), global::Network.PlayerConfirm.Parser, new[]{ "PlayerId", "Tiles", "BoxShut" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Network.Player), global::Network.Player.Parser, new[]{ "PlayerId", "State", "Roll", "Tiles" }, null, null, null, null)
           }));
     }
     #endregion
@@ -109,7 +109,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.ApiReflection.Descriptor.MessageTypes[0]; }
+      get { return global::Network.ApiReflection.Descriptor.MessageTypes[0]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -180,12 +180,12 @@ namespace Api {
 
     /// <summary>Field number for the "players" field.</summary>
     public const int PlayersFieldNumber = 4;
-    private static readonly pb::FieldCodec<global::Api.Player> _repeated_players_codec
-        = pb::FieldCodec.ForMessage(34, global::Api.Player.Parser);
-    private readonly pbc::RepeatedField<global::Api.Player> players_ = new pbc::RepeatedField<global::Api.Player>();
+    private static readonly pb::FieldCodec<global::Network.Player> _repeated_players_codec
+        = pb::FieldCodec.ForMessage(34, global::Network.Player.Parser);
+    private readonly pbc::RepeatedField<global::Network.Player> players_ = new pbc::RepeatedField<global::Network.Player>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::Api.Player> Players {
+    public pbc::RepeatedField<global::Network.Player> Players {
       get { return players_; }
     }
 
@@ -407,7 +407,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.ApiReflection.Descriptor.MessageTypes[1]; }
+      get { return global::Network.ApiReflection.Descriptor.MessageTypes[1]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -452,12 +452,12 @@ namespace Api {
 
     /// <summary>Field number for the "rounds" field.</summary>
     public const int RoundsFieldNumber = 2;
-    private static readonly pb::FieldCodec<global::Api.RoundScore> _repeated_rounds_codec
-        = pb::FieldCodec.ForMessage(18, global::Api.RoundScore.Parser);
-    private readonly pbc::RepeatedField<global::Api.RoundScore> rounds_ = new pbc::RepeatedField<global::Api.RoundScore>();
+    private static readonly pb::FieldCodec<global::Network.RoundScore> _repeated_rounds_codec
+        = pb::FieldCodec.ForMessage(18, global::Network.RoundScore.Parser);
+    private readonly pbc::RepeatedField<global::Network.RoundScore> rounds_ = new pbc::RepeatedField<global::Network.RoundScore>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::Api.RoundScore> Rounds {
+    public pbc::RepeatedField<global::Network.RoundScore> Rounds {
       get { return rounds_; }
     }
 
@@ -631,7 +631,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.ApiReflection.Descriptor.MessageTypes[2]; }
+      get { return global::Network.ApiReflection.Descriptor.MessageTypes[2]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -676,10 +676,10 @@ namespace Api {
 
     /// <summary>Field number for the "score" field.</summary>
     public const int ScoreFieldNumber = 2;
-    private global::Api.RoundScore score_;
+    private global::Network.RoundScore score_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Api.RoundScore Score {
+    public global::Network.RoundScore Score {
       get { return score_; }
       set {
         score_ = value;
@@ -789,7 +789,7 @@ namespace Api {
       }
       if (other.score_ != null) {
         if (score_ == null) {
-          Score = new global::Api.RoundScore();
+          Score = new global::Network.RoundScore();
         }
         Score.MergeFrom(other.Score);
       }
@@ -818,7 +818,7 @@ namespace Api {
           }
           case 18: {
             if (score_ == null) {
-              Score = new global::Api.RoundScore();
+              Score = new global::Network.RoundScore();
             }
             input.ReadMessage(Score);
             break;
@@ -848,7 +848,7 @@ namespace Api {
           }
           case 18: {
             if (score_ == null) {
-              Score = new global::Api.RoundScore();
+              Score = new global::Network.RoundScore();
             }
             input.ReadMessage(Score);
             break;
@@ -875,7 +875,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.ApiReflection.Descriptor.MessageTypes[3]; }
+      get { return global::Network.ApiReflection.Descriptor.MessageTypes[3]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1090,7 +1090,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.ApiReflection.Descriptor.MessageTypes[4]; }
+      get { return global::Network.ApiReflection.Descriptor.MessageTypes[4]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1288,7 +1288,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.ApiReflection.Descriptor.MessageTypes[5]; }
+      get { return global::Network.ApiReflection.Descriptor.MessageTypes[5]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1523,7 +1523,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.ApiReflection.Descriptor.MessageTypes[6]; }
+      get { return global::Network.ApiReflection.Descriptor.MessageTypes[6]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1581,10 +1581,10 @@ namespace Api {
 
     /// <summary>Field number for the "state" field.</summary>
     public const int StateFieldNumber = 3;
-    private global::Api.TileState state_ = global::Api.TileState.Open;
+    private global::Network.TileState state_ = global::Network.TileState.Open;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Api.TileState State {
+    public global::Network.TileState State {
       get { return state_; }
       set {
         state_ = value;
@@ -1618,7 +1618,7 @@ namespace Api {
       int hash = 1;
       if (PlayerId.Length != 0) hash ^= PlayerId.GetHashCode();
       if (Index != 0) hash ^= Index.GetHashCode();
-      if (State != global::Api.TileState.Open) hash ^= State.GetHashCode();
+      if (State != global::Network.TileState.Open) hash ^= State.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1645,7 +1645,7 @@ namespace Api {
         output.WriteRawTag(16);
         output.WriteInt32(Index);
       }
-      if (State != global::Api.TileState.Open) {
+      if (State != global::Network.TileState.Open) {
         output.WriteRawTag(24);
         output.WriteEnum((int) State);
       }
@@ -1667,7 +1667,7 @@ namespace Api {
         output.WriteRawTag(16);
         output.WriteInt32(Index);
       }
-      if (State != global::Api.TileState.Open) {
+      if (State != global::Network.TileState.Open) {
         output.WriteRawTag(24);
         output.WriteEnum((int) State);
       }
@@ -1687,7 +1687,7 @@ namespace Api {
       if (Index != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Index);
       }
-      if (State != global::Api.TileState.Open) {
+      if (State != global::Network.TileState.Open) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) State);
       }
       if (_unknownFields != null) {
@@ -1708,7 +1708,7 @@ namespace Api {
       if (other.Index != 0) {
         Index = other.Index;
       }
-      if (other.State != global::Api.TileState.Open) {
+      if (other.State != global::Network.TileState.Open) {
         State = other.State;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -1739,7 +1739,7 @@ namespace Api {
             break;
           }
           case 24: {
-            State = (global::Api.TileState) input.ReadEnum();
+            State = (global::Network.TileState) input.ReadEnum();
             break;
           }
         }
@@ -1770,7 +1770,7 @@ namespace Api {
             break;
           }
           case 24: {
-            State = (global::Api.TileState) input.ReadEnum();
+            State = (global::Network.TileState) input.ReadEnum();
             break;
           }
         }
@@ -1795,7 +1795,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.ApiReflection.Descriptor.MessageTypes[7]; }
+      get { return global::Network.ApiReflection.Descriptor.MessageTypes[7]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1841,12 +1841,12 @@ namespace Api {
 
     /// <summary>Field number for the "tiles" field.</summary>
     public const int TilesFieldNumber = 2;
-    private static readonly pb::FieldCodec<global::Api.TileState> _repeated_tiles_codec
-        = pb::FieldCodec.ForEnum(18, x => (int) x, x => (global::Api.TileState) x);
-    private readonly pbc::RepeatedField<global::Api.TileState> tiles_ = new pbc::RepeatedField<global::Api.TileState>();
+    private static readonly pb::FieldCodec<global::Network.TileState> _repeated_tiles_codec
+        = pb::FieldCodec.ForEnum(18, x => (int) x, x => (global::Network.TileState) x);
+    private readonly pbc::RepeatedField<global::Network.TileState> tiles_ = new pbc::RepeatedField<global::Network.TileState>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::Api.TileState> Tiles {
+    public pbc::RepeatedField<global::Network.TileState> Tiles {
       get { return tiles_; }
     }
 
@@ -2058,7 +2058,7 @@ namespace Api {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Api.ApiReflection.Descriptor.MessageTypes[8]; }
+      get { return global::Network.ApiReflection.Descriptor.MessageTypes[8]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2105,10 +2105,10 @@ namespace Api {
 
     /// <summary>Field number for the "State" field.</summary>
     public const int StateFieldNumber = 3;
-    private global::Api.PlayerState state_ = global::Api.PlayerState.Idle;
+    private global::Network.PlayerState state_ = global::Network.PlayerState.Idle;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Api.PlayerState State {
+    public global::Network.PlayerState State {
       get { return state_; }
       set {
         state_ = value;
@@ -2129,12 +2129,12 @@ namespace Api {
 
     /// <summary>Field number for the "tiles" field.</summary>
     public const int TilesFieldNumber = 4;
-    private static readonly pb::FieldCodec<global::Api.TileState> _repeated_tiles_codec
-        = pb::FieldCodec.ForEnum(34, x => (int) x, x => (global::Api.TileState) x);
-    private readonly pbc::RepeatedField<global::Api.TileState> tiles_ = new pbc::RepeatedField<global::Api.TileState>();
+    private static readonly pb::FieldCodec<global::Network.TileState> _repeated_tiles_codec
+        = pb::FieldCodec.ForEnum(34, x => (int) x, x => (global::Network.TileState) x);
+    private readonly pbc::RepeatedField<global::Network.TileState> tiles_ = new pbc::RepeatedField<global::Network.TileState>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::Api.TileState> Tiles {
+    public pbc::RepeatedField<global::Network.TileState> Tiles {
       get { return tiles_; }
     }
 
@@ -2165,7 +2165,7 @@ namespace Api {
     public override int GetHashCode() {
       int hash = 1;
       if (PlayerId.Length != 0) hash ^= PlayerId.GetHashCode();
-      if (State != global::Api.PlayerState.Idle) hash ^= State.GetHashCode();
+      if (State != global::Network.PlayerState.Idle) hash ^= State.GetHashCode();
       if (Roll != 0) hash ^= Roll.GetHashCode();
       hash ^= tiles_.GetHashCode();
       if (_unknownFields != null) {
@@ -2194,7 +2194,7 @@ namespace Api {
         output.WriteRawTag(16);
         output.WriteInt32(Roll);
       }
-      if (State != global::Api.PlayerState.Idle) {
+      if (State != global::Network.PlayerState.Idle) {
         output.WriteRawTag(24);
         output.WriteEnum((int) State);
       }
@@ -2217,7 +2217,7 @@ namespace Api {
         output.WriteRawTag(16);
         output.WriteInt32(Roll);
       }
-      if (State != global::Api.PlayerState.Idle) {
+      if (State != global::Network.PlayerState.Idle) {
         output.WriteRawTag(24);
         output.WriteEnum((int) State);
       }
@@ -2235,7 +2235,7 @@ namespace Api {
       if (PlayerId.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(PlayerId);
       }
-      if (State != global::Api.PlayerState.Idle) {
+      if (State != global::Network.PlayerState.Idle) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) State);
       }
       if (Roll != 0) {
@@ -2257,7 +2257,7 @@ namespace Api {
       if (other.PlayerId.Length != 0) {
         PlayerId = other.PlayerId;
       }
-      if (other.State != global::Api.PlayerState.Idle) {
+      if (other.State != global::Network.PlayerState.Idle) {
         State = other.State;
       }
       if (other.Roll != 0) {
@@ -2292,7 +2292,7 @@ namespace Api {
             break;
           }
           case 24: {
-            State = (global::Api.PlayerState) input.ReadEnum();
+            State = (global::Network.PlayerState) input.ReadEnum();
             break;
           }
           case 34:
@@ -2328,7 +2328,7 @@ namespace Api {
             break;
           }
           case 24: {
-            State = (global::Api.PlayerState) input.ReadEnum();
+            State = (global::Network.PlayerState) input.ReadEnum();
             break;
           }
           case 34:

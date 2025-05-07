@@ -4,6 +4,8 @@ using R3;
 
 namespace Player
 {
+    using Network;
+
     public interface ILocalPlayerPresenter : IPlayerPresenter
     {
         ReactiveProperty<bool> CanConfirm { get; }
@@ -21,9 +23,10 @@ namespace Player
         public LocalPlayerPresenter(
             PlayerModel model,
             IPlayerService playerService,
+            IMatchService matchService,
             EventFactory eventFactory
         )
-            : base(model, playerService, eventFactory)
+            : base(model, playerService, matchService, eventFactory)
         {
             CanConfirm = new ReactiveProperty<bool>(false);
         }
@@ -78,15 +81,23 @@ namespace Player
             Service.Done();
         }
 
-        protected override void StateReceived(PlayerState state)
+        protected override void OnPlayerTurn(PlayerTurn playerTurn)
         {
-            SetState(state);
+            if (!IsCurrentPlayer(playerTurn.PlayerId))
+            {
+                return;
+            }
+            SetState(PlayerState.Roll);
         }
 
-        protected override async void RollReceived(int value, bool skip = false)
+        protected override async void OnPlayerRoll(PlayerRoll playerRoll)
         {
-            Model.Roll = value;
-            await RollPublisher.PublishAsync((value, skip));
+            if (!IsCurrentPlayer(playerRoll.PlayerId))
+            {
+                return;
+            }
+            Model.Roll = playerRoll.Roll;
+            await RollPublisher.PublishAsync((playerRoll.Roll, false));
             SetState(HasMoves() ? PlayerState.Play : PlayerState.Fail);
         }
 

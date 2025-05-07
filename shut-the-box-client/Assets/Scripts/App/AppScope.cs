@@ -10,6 +10,8 @@ using ILogger = Revel.Diagnostics.ILogger;
 
 namespace App
 {
+    using Match;
+
     public class AppScope : LifetimeScope
     {
         public NetworkSettings networkSettings;
@@ -26,7 +28,8 @@ namespace App
             builder.Register<INative, DebugNative>(Lifetime.Singleton);
             builder.Register<ILogger, DebugLogger>(Lifetime.Singleton);
             builder.Register<ISceneController, SceneController>(Lifetime.Singleton);
-
+            builder.Register<IMatchPresenter, MatchPresenter>(Lifetime.Singleton);
+            
             if (debugServices.enabled)
             {
                 builder.RegisterInstance(debugServices).AsImplementedInterfaces();

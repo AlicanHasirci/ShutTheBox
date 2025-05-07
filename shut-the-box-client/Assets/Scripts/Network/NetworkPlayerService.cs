@@ -1,42 +1,34 @@
-using System;
-using System.Collections.Generic;
-using Api;
-using Cysharp.Threading.Tasks;
-using Google.Protobuf;
-using Match;
-using MessagePipe;
-using Nakama;
-using Player;
-using R3;
-using DisposableBag = MessagePipe.DisposableBag;
-using ILogger = Revel.Diagnostics.ILogger;
-using TileState = Player.TileState;
-
 namespace Network
 {
+    using System;
+    using Cysharp.Threading.Tasks;
+    using Google.Protobuf;
+    using MessagePipe;
+    using Nakama;
+    using R3;
+    using DisposableBag = MessagePipe.DisposableBag;
+    using ILogger = Revel.Diagnostics.ILogger;
+    
     public class NetworkPlayerService : IPlayerService, IDisposable
     {
-        public ISubscriber<int> OnRoundStart { get; }
-        public ISubscriber<string> OnTurn { get; }
-        public ISubscriber<(string, int)> OnRoll { get; }
-        public ISubscriber<(string, int, TileState)> OnMove { get; }
-        public ISubscriber<(string, IReadOnlyList<TileState>)> OnConfirm { get; }
+        public ISubscriber<RoundStart> OnRoundStart { get; }
+        public ISubscriber<PlayerTurn> OnTurn { get; }
+        public ISubscriber<PlayerRoll> OnRoll { get; }
+        public ISubscriber<PlayerMove> OnMove { get; }
+        public ISubscriber<PlayerConfirm> OnConfirm { get; }
 
         private readonly ILogger _logger;
         private readonly string _playerId;
         private readonly ISocket _socket;
         private readonly IMatchService _matchService;
 
-        private readonly IDisposablePublisher<int> _onRoundStart;
-        private readonly IDisposablePublisher<string> _onTurn;
-        private readonly IDisposablePublisher<(string, int)> _onRoll;
-        private readonly IDisposablePublisher<(string, int, TileState)> _onMove;
-        private readonly IDisposablePublisher<(string, IReadOnlyList<TileState>)> _onConfirm;
+        private readonly IDisposablePublisher<RoundStart> _onRoundStart;
+        private readonly IDisposablePublisher<PlayerTurn> _onTurn;
+        private readonly IDisposablePublisher<PlayerRoll> _onRoll;
+        private readonly IDisposablePublisher<PlayerMove> _onMove;
+        private readonly IDisposablePublisher<PlayerConfirm> _onConfirm;
 
-        private readonly List<TileState> _tileStates = new();
         private readonly IDisposable _disposable;
-
-        private string MatchId => _matchService?.Model?.MatchId;
 
         public NetworkPlayerService(
             ILogger logger,
@@ -50,11 +42,11 @@ namespace Network
             _socket = networkService.Socket;
             _playerId = networkService.PlayerId;
 
-            (_onRoundStart, OnRoundStart) = eventFactory.CreateEvent<int>();
-            (_onTurn, OnTurn) = eventFactory.CreateEvent<string>();
-            (_onRoll, OnRoll) = eventFactory.CreateEvent<(string, int)>();
-            (_onMove, OnMove) = eventFactory.CreateEvent<(string, int, TileState)>();
-            (_onConfirm, OnConfirm) = eventFactory.CreateEvent<(string, IReadOnlyList<TileState>)>();
+            (_onRoundStart, OnRoundStart) = eventFactory.CreateEvent<RoundStart>();
+            (_onTurn, OnTurn) = eventFactory.CreateEvent<PlayerTurn>();
+            (_onRoll, OnRoll) = eventFactory.CreateEvent<PlayerRoll>();
+            (_onMove, OnMove) = eventFactory.CreateEvent<PlayerMove>();
+            (_onConfirm, OnConfirm) = eventFactory.CreateEvent<PlayerConfirm>();
 
             _disposable = DisposableBag.Create(
                 Observable
@@ -86,23 +78,23 @@ namespace Network
             { 
                 case OpCode.RoundStart:
                     RoundStart roundStart = RoundStart.Parser.ParseFrom(state.State);
-                    _onRoundStart.Publish(roundStart.Interval);
+                    _onRoundStart.Publish(roundStart);
                     break;
                 case OpCode.PlayerTurn:
                     PlayerTurn playerTurn = PlayerTurn.Parser.ParseFrom(state.State);
-                    _onTurn.Publish(playerTurn.PlayerId);
+                    _onTurn.Publish(playerTurn);
                     break;
                 case OpCode.PlayerRoll:
                     PlayerRoll playerRoll = PlayerRoll.Parser.ParseFrom(state.State);
-                    _onRoll.Publish((playerRoll.PlayerId, playerRoll.Roll));
+                    _onRoll.Publish(playerRoll);
                     break;
                 case OpCode.PlayerMove:
                     PlayerMove playerMove = PlayerMove.Parser.ParseFrom(state.State);
-                    _onMove.Publish((playerMove.PlayerId, playerMove.Index, (TileState)(int)playerMove.State));
+                    _onMove.Publish(playerMove);
                     break;
                 case OpCode.PlayerConf:
                     PlayerConfirm playerConfirm = PlayerConfirm.Parser.ParseFrom(state.State);
-                    _onConfirm.Publish((playerConfirm.PlayerId, ConvertTileStates(playerConfirm.Tiles)));
+                    _onConfirm.Publish(playerConfirm);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -111,42 +103,42 @@ namespace Network
 
         public void Ready()
         {
-            _socket.SendMatchStateAsync(MatchId, (long)OpCode.PlayerReady, string.Empty);
+            _socket.SendMatchStateAsync(_matchService.MatchId, (long)OpCode.PlayerReady, string.Empty);
         }
 
         public void Roll()
         {
-            _socket.SendMatchStateAsync(MatchId, (long)OpCode.PlayerRoll, string.Empty);
+            _socket.SendMatchStateAsync(_matchService.MatchId, (long)OpCode.PlayerRoll, string.Empty);
         }
 
         public void Toggle(int index)
         {
             _logger.Info($"Player toggled {index}.");
             PlayerMove move = new() { PlayerId = _playerId, Index = index };
-            _socket.SendMatchStateAsync(MatchId, (long)OpCode.PlayerMove, move.ToByteArray());
+            _socket.SendMatchStateAsync(_matchService.MatchId, (long)OpCode.PlayerMove, move.ToByteArray());
         }
 
         public void Confirm()
         {
             _logger.Info("Player confirmed.");
-            _socket.SendMatchStateAsync(MatchId, (long)OpCode.PlayerConf, string.Empty);
+            _socket.SendMatchStateAsync(_matchService.MatchId, (long)OpCode.PlayerConf, string.Empty);
         }
 
         public void Done()
         {
             _logger.Info("Player done.");
-            _socket.SendMatchStateAsync(MatchId, (long)OpCode.PlayerFail, string.Empty);
+            _socket.SendMatchStateAsync(_matchService.MatchId, (long)OpCode.PlayerFail, string.Empty);
         }
 
-        private IReadOnlyList<TileState> ConvertTileStates(IList<Api.TileState> tileStates)
-        {
-            _tileStates.Clear();
-            foreach (var state in tileStates)
-            {
-                _tileStates.Add((TileState)state);
-            }
-
-            return _tileStates;
-        }
+        // private IReadOnlyList<TileState> ConvertTileStates(IList<Api.TileState> tileStates)
+        // {
+        //     _tileStates.Clear();
+        //     foreach (var state in tileStates)
+        //     {
+        //         _tileStates.Add((TileState)state);
+        //     }
+        //
+        //     return _tileStates;
+        // }
     }
 }

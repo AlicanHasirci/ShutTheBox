@@ -13,7 +13,7 @@ namespace Debug
         {
             Network, Match, Player
         }
-
+        
         public bool enabled;
         
         [UsedImplicitly]

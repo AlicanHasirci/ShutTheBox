@@ -8,6 +8,7 @@ using UnityEngine;
 namespace Match
 {
     using Cysharp.Threading.Tasks;
+    using Network;
     using Popups;
     using VContainer;
     using Revel.UI.Popup;
@@ -24,6 +25,9 @@ namespace Match
         [SerializeField] 
         private TableInfoBehaviour _tableInfo;
 
+        [Inject] 
+        public IMatchPresenter MatchPresenter;
+        
         [Inject]
         public IReadOnlyList<IPlayerPresenter> PlayerPresenters;
 
@@ -54,7 +58,7 @@ namespace Match
             }
 
             _disposable = DisposableBag.Create(
-                MatchService.OnMatchState.Subscribe(OnMatchState),
+                MatchService.OnMatchOver.Subscribe(OnMatchOver),
                 MatchService.OnRoundStart.Subscribe(OnRoundStart)
             );
         }
@@ -64,22 +68,19 @@ namespace Match
             _disposable?.Dispose();
         }
 
-        private void OnMatchState(MatchState state)
+        private void OnMatchOver(MatchOver matchOver)
         {
-            if (state == MatchState.Idle)
-            {
-                InfoPopup.Payload payload = new("Game Over", "Quit", Exit);
-                _popupManager.Show<InfoPopup, InfoPopup.Payload>(payload);
-            }
+            InfoPopup.Payload payload = new("Game Over", "Quit", Exit);
+            _popupManager.Show<InfoPopup, InfoPopup.Payload>(payload);
         }
 
-        private void OnRoundStart(int interval)
+        private void OnRoundStart(RoundStart roundStart)
         {
-            int count = MatchService.Model.Rounds.Count;
-            _tableInfo.SetTableInfo($"Round {count + 1}\nStarting..", interval);
+            int count = MatchPresenter.Model.Rounds.Count;
+            _tableInfo.SetTableInfo($"Round {count + 1}\nStarting..", roundStart.Interval);
         }
 
-        public void Exit()
+        private void Exit()
         {
             MatchService.LeaveMatch();
             SceneController.ChangeTopScene("MenuScene").Forget();

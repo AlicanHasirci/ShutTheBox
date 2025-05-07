@@ -1,0 +1,22 @@
+{
+    "name": "Network",
+    "rootNamespace": "",
+    "references": [
+        "VContainer",
+        "MessagePipe",
+        "UniTask",
+        "NakamaRuntime",
+        "Revel.Diagnostics",
+        "Revel.Native",
+        "ParrelSync"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

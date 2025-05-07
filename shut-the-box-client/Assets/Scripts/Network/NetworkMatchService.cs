@@ -1,25 +1,24 @@
-using System;
-using Api;
-using Cysharp.Threading.Tasks;
-using Match;
-using MessagePipe;
-using Nakama;
-using Player;
-using R3;
-using DisposableBag = MessagePipe.DisposableBag;
-using ILogger = Revel.Diagnostics.ILogger;
 namespace Network
 {
-    using System.Collections.Generic;
+    using System;
+    using Cysharp.Threading.Tasks;
+    using MessagePipe;
+    using Nakama;
+    using R3;
+    using DisposableBag = MessagePipe.DisposableBag;
+    using ILogger = Revel.Diagnostics.ILogger;
 
     public class NetworkMatchService : IMatchService, IDisposable
     {
-        public MatchModel Model { get; private set; }
-        public ISubscriber<MatchState> OnMatchState { get; }
-        public ISubscriber<int> OnRoundStart { get; }
+        public string MatchId { get; private set; }
+        public MatchStart MatchStart { get; private set; }
+        public ISubscriber<MatchStart> OnMatchStart { get; }
+        public ISubscriber<RoundStart> OnRoundStart { get; }
+        public ISubscriber<MatchOver> OnMatchOver { get; }
 
-        private readonly IDisposablePublisher<MatchState> _matchState;
-        private readonly IDisposablePublisher<int> _roundStart;
+        private readonly IDisposablePublisher<MatchStart> _matchStart;
+        private readonly IDisposablePublisher<RoundStart> _roundStart;
+        private readonly IDisposablePublisher<MatchOver> _matchOver;
         
         private readonly ILogger _logger;
         private readonly NetworkService _service;
@@ -31,29 +30,28 @@ namespace Network
             _logger = logger;
             _service = networkService;
             
-            (_matchState, OnMatchState) = eventFactory.CreateEvent<MatchState>();
-            (_roundStart, OnRoundStart) = eventFactory.CreateEvent<int>();
+            (_matchStart, OnMatchStart) = eventFactory.CreateEvent<MatchStart>();
+            (_roundStart, OnRoundStart) = eventFactory.CreateEvent<RoundStart>();
+            (_matchOver, OnMatchOver) = eventFactory.CreateEvent<MatchOver>();
             
             _disposable = DisposableBag.Create(
                 Observable
                     .FromEvent(
-                        // ReSharper disable once RedundantLambdaParameterType
                         (Action<IMatchState> a) => networkService.Socket.ReceivedMatchState += a,
-                        // ReSharper disable once RedundantLambdaParameterType
                         (Action<IMatchState> a) => networkService.Socket.ReceivedMatchState -= a
                     )
                     .Subscribe(ReceivedMatchState),
                 Observable
                     .FromEvent(
-                        // ReSharper disable once RedundantLambdaParameterType
                         (Action<IMatchmakerMatched> a) =>
                             networkService.Socket.ReceivedMatchmakerMatched += a,
-                        // ReSharper disable once RedundantLambdaParameterType
                         (Action<IMatchmakerMatched> a) =>
                             networkService.Socket.ReceivedMatchmakerMatched -= a
                     )
                     .Subscribe(MatchmakerMatched),
-                _matchState
+                _matchStart,
+                _roundStart,
+                _matchOver
             );
         }
 
@@ -69,21 +67,30 @@ namespace Network
                 CancelMatchmaking();
             }
 
-            _matchState.Publish(MatchState.Finding);
             _ticket = await _service.Socket.AddMatchmakerAsync("*", 2, 2);
+            await UniTask.SwitchToMainThread();
+            _logger.Info($"Started matchmaking: {_ticket.Ticket}");
         }
 
         public async void CancelMatchmaking()
         {
+            _logger.Info($"Canceling matchmaking: {_ticket.Ticket}");
             await _service.Socket.RemoveMatchmakerAsync(_ticket);
-
-            _matchState.Publish(MatchState.Idle);
             _ticket = null;
         }
 
         public async void LeaveMatch()
         {
-            await _service.Socket.LeaveMatchAsync(Model.MatchId);
+            _logger.Info($"Leaving match: {_ticket.Ticket}");
+            await _service.Socket.LeaveMatchAsync(MatchId);
+        }
+
+        private async void MatchmakerMatched(IMatchmakerMatched matched)
+        {
+            IMatch match = await _service.Socket.JoinMatchAsync(matched).AsUniTask();
+            await UniTask.SwitchToMainThread();
+            _logger.Info($"Matched: {match.Id}");
+            _ticket = null;
         }
 
         private async void ReceivedMatchState(IMatchState state)
@@ -93,42 +100,21 @@ namespace Network
             switch (opCode)
             {
                 case OpCode.MatchStart:
-                    MatchStart match = MatchStart.Parser.ParseFrom(state.State);
-                    Model = new MatchModel
-                    {
-                        Players = new List<PlayerModel>(match.Players.Count),
-                        Rounds = new List<RoundModel>(match.RoundCount),
-                        MatchId = state.MatchId,
-                        TileCount = match.TileCount,
-                        TurnTime = match.TurnTime,
-                    };
-                    
-                    foreach (Api.Player player in match.Players)
-                    {
-                        Model.Players.Add(new PlayerModel(player.PlayerId, match.TileCount));
-                    }
-
-                    _matchState.Publish(MatchState.Waiting);
+                    MatchId = state.MatchId;
+                    MatchStart = MatchStart.Parser.ParseFrom(state.State);
+                    _matchStart.Publish(MatchStart);
                     break;
                 case OpCode.RoundStart:
                     RoundStart roundStart = RoundStart.Parser.ParseFrom(state.State);
-                    Model.Rounds.Add(new RoundModel(roundStart.Score.Players, roundStart.Score.Scores));
-                    _roundStart.Publish(roundStart.Interval);
+                    _roundStart.Publish(roundStart);
                     break;
                 case OpCode.MatchOver:
-                    _matchState.Publish(MatchState.Idle);
+                    MatchOver matchOver = MatchOver.Parser.ParseFrom(state.State);
+                    _matchOver.Publish(matchOver);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-        }
-
-        private async void MatchmakerMatched(IMatchmakerMatched matched)
-        {
-            await UniTask.SwitchToMainThread();
-            _matchState.Publish(MatchState.Joining);
-            await _service.Socket.JoinMatchAsync(matched).AsUniTask();
-            _ticket = null;
         }
     }
 }

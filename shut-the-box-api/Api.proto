@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package Api;
 option go_package = "shut-the-box-server/api";
+option csharp_namespace = "Network";
 
 enum OpCode {
   UNSPECIFIED   = 0;

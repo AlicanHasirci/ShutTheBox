@@ -19,13 +19,6 @@ namespace Player
         Fail = 3,
     }
 
-    public struct PlayerData
-    {
-        public PlayerState State;
-        public TileState[] Tiles;
-        public int Roll;
-    }
-
     [Serializable]
     public class PlayerModel
     {

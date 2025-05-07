@@ -2,7 +2,6 @@ using System;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
 using Nakama;
-using ParrelSync;
 using R3;
 using Revel.Native;
 using VContainer;
@@ -10,6 +9,8 @@ using ILogger = Revel.Diagnostics.ILogger;
 
 namespace Network
 {
+    using ParrelSync;
+
     public interface INetworkService
     {
         string PlayerId { get; }
@@ -60,7 +61,7 @@ namespace Network
 
             if (!string.IsNullOrEmpty(authToken))
             {
-                var session = Session.Restore(authToken);
+                ISession session = Session.Restore(authToken);
                 if (!session.IsExpired)
                 {
                     _session = session;
@@ -69,7 +70,7 @@ namespace Network
 
             if (_session == null)
             {
-                var deviceId = ClonesManager.IsClone()
+                string deviceId = ClonesManager.IsClone()
                     ? "ParallelSyncClone"
                     : _native.GetUniqueID();
                 _session = await _client.AuthenticateDeviceAsync(deviceId);
