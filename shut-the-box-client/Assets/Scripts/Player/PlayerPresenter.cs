@@ -106,7 +106,7 @@ namespace Player
                 return;
             }
             Model.Roll = playerRoll.Roll;
-            await RollPublisher.PublishAsync((playerRoll.Roll, true));
+            await RollPublisher.PublishAsync((playerRoll.Roll, false));
         }
 
         protected virtual void OnPlayerMove(PlayerMove playerMove)
@@ -121,7 +121,19 @@ namespace Player
 
         protected virtual void OnPlayerConfirm(PlayerConfirm playerConfirm)
         {
-            throw new NotImplementedException();
+            if (!IsCurrentPlayer(playerConfirm.PlayerId))
+            {
+                return;
+            }
+
+            for (int i = 0; i < Model.Tiles.Length; i++)
+            {
+                Model.Tiles[i] = (TileState)playerConfirm.Tiles[i];
+            }
+
+            Model.State = PlayerState.Idle;
+            BoxPublisher.Publish(Model.Tiles);
+            StatePublisher.Publish(Model.State);
         }
 
         protected bool IsCurrentPlayer(string playerId)

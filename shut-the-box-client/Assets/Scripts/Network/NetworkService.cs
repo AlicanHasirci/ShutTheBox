@@ -1,15 +1,17 @@
-using System;
-using Cysharp.Threading.Tasks;
-using MessagePipe;
-using Nakama;
-using R3;
-using Revel.Native;
-using VContainer;
-using ILogger = Revel.Diagnostics.ILogger;
 
 namespace Network
 {
+    using System;
+    using Cysharp.Threading.Tasks;
+    using MessagePipe;
+    using Nakama;
+    using R3;
+    using Revel.Native;
+    using VContainer;
+    using ILogger = Revel.Diagnostics.ILogger;
+#if UNITY_EDITOR
     using ParrelSync;
+#endif
 
     public interface INetworkService
     {
@@ -70,9 +72,13 @@ namespace Network
 
             if (_session == null)
             {
+#if UNITY_EDITOR
                 string deviceId = ClonesManager.IsClone()
                     ? "ParallelSyncClone"
                     : _native.GetUniqueID();
+#else
+                string deviceId = _native.GetUniqueID();
+#endif
                 _session = await _client.AuthenticateDeviceAsync(deviceId);
                 _native.SetKey(SessionPrefName, _session.AuthToken);
             }

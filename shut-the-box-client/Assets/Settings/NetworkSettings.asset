@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89f17e48f1884531a06728529ca708b7, type: 3}
   m_Name: NetworkSettings
   m_EditorClassIdentifier: 
-  <Host>k__BackingField: 127.0.0.1
-  <Port>k__BackingField: 7350
-  <Scheme>k__BackingField: http
+  <Host>k__BackingField: stb.ngrok.io
+  <Port>k__BackingField: 443
+  <Scheme>k__BackingField: https
   <Key>k__BackingField: defaultkey
-  <UseDebug>k__BackingField: 1
