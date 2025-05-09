@@ -1,17 +1,17 @@
-using System;
-using System.Collections.Generic;
-using MessagePipe;
-using DisposableBag = MessagePipe.DisposableBag;
 
 namespace Player
 {
     using Network;
+    using System;
+    using MessagePipe;
+    using DisposableBag = MessagePipe.DisposableBag;
 
     public interface IPlayerPresenter
     {
         ISubscriber<PlayerState> OnState { get; }
         IAsyncSubscriber<(int, bool)> OnRoll { get; }
         ISubscriber<TileState[]> OnBox { get; }
+        ISubscriber<int> OnScore { get; }
         void TileToggle(int index);
         void Initialize();
     }
@@ -21,12 +21,14 @@ namespace Player
         public ISubscriber<PlayerState> OnState { get; }
         public IAsyncSubscriber<(int, bool)> OnRoll { get; }
         public ISubscriber<TileState[]> OnBox { get; }
+        public ISubscriber<int> OnScore { get; }
 
         protected readonly PlayerModel Model;
         protected readonly IPlayerService Service;
         protected readonly IDisposablePublisher<PlayerState> StatePublisher;
         protected readonly IDisposablePublisher<TileState[]> BoxPublisher;
         protected readonly IDisposableAsyncPublisher<(int, bool)> RollPublisher;
+        protected readonly IDisposablePublisher<int> ScorePublisher;
 
         private readonly IDisposable _disposable;
 
@@ -40,6 +42,7 @@ namespace Player
             (StatePublisher, OnState) = eventFactory.CreateEvent<PlayerState>();
             (BoxPublisher, OnBox) = eventFactory.CreateEvent<TileState[]>();
             (RollPublisher, OnRoll) = eventFactory.CreateAsyncEvent< (int, bool)>();
+            (ScorePublisher, OnScore) = eventFactory.CreateEvent<int>();
 
             Model = model;
             Service = playerService;
@@ -47,6 +50,7 @@ namespace Player
                 StatePublisher,
                 BoxPublisher,
                 RollPublisher,
+                ScorePublisher,
                 matchService.OnRoundStart.Subscribe(OnRoundStart),
                 playerService.OnTurn.Subscribe(OnPlayerTurn),
                 playerService.OnRoll.Subscribe(OnPlayerRoll),
@@ -59,6 +63,7 @@ namespace Player
         {
             StatePublisher.Publish(Model.State);
             BoxPublisher.Publish(Model.Tiles);
+            ScorePublisher.Publish(Model.Score);
             if (Model.State is PlayerState.Play)
             {
                 RollPublisher.Publish((Model.Roll, true));
@@ -132,8 +137,10 @@ namespace Player
             }
 
             Model.State = PlayerState.Idle;
+            Model.Score += playerConfirm.Score;
             BoxPublisher.Publish(Model.Tiles);
             StatePublisher.Publish(Model.State);
+            ScorePublisher.Publish(Model.Score);
         }
 
         protected bool IsCurrentPlayer(string playerId)

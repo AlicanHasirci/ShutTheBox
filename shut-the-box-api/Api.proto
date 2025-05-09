@@ -35,22 +35,21 @@ message MatchStart {
   int32 roundCount = 1;
   int32 tileCount = 2;
   int32 turnTime = 3;
-  repeated Player players = 4;
+  int32 roundId = 4;
+  repeated Player players = 5;
 }
 
 message MatchOver {
-  string winner = 1;
-  repeated RoundScore rounds = 2;
+  repeated PlayerScore scores = 1;
+}
+
+message PlayerScore {
+  string playerId = 1;
+  int32 score = 2;
 }
 
 message RoundStart {
-  int32 interval = 1;
-  RoundScore score = 2;
-}
-
-message RoundScore {
-  repeated string players = 1;
-  repeated int32 scores = 2;
+  int32 roundId = 1;
 }
 
 message PlayerTurn  {
@@ -72,11 +71,13 @@ message PlayerConfirm {
   string playerId = 1;
   repeated TileState tiles = 2;
   bool boxShut = 3;
+  int32 score = 4;
 }
 
 message Player {
   string playerId = 1;
-  PlayerState State = 3;
-  int32 roll = 2;
-  repeated TileState tiles = 4;
+  int32 score = 2;
+  int32 roll = 3;
+  PlayerState State = 4;
+  repeated TileState tiles = 5;
 }

@@ -58,9 +58,14 @@ namespace Match
             }
 
             _disposable = DisposableBag.Create(
-                MatchService.OnMatchOver.Subscribe(OnMatchOver),
-                MatchService.OnRoundStart.Subscribe(OnRoundStart)
+                MatchService.OnRoundStart.Subscribe(OnRoundStart),
+                MatchPresenter.OnMatchResult.Subscribe(OnMatchResult)
             );
+        }
+
+        private void OnMatchResult(MatchResult result)
+        {
+            _popupManager.Show<MatchResultPopup, MatchResult>(result);
         }
 
         private void OnDestroy()
@@ -68,21 +73,14 @@ namespace Match
             _disposable?.Dispose();
         }
 
-        private void OnMatchOver(MatchOver matchOver)
-        {
-            InfoPopup.Payload payload = new("Game Over", "Quit", Exit);
-            _popupManager.Show<InfoPopup, InfoPopup.Payload>(payload);
-        }
-
         private void OnRoundStart(RoundStart roundStart)
         {
-            int count = MatchPresenter.Model.Rounds.Count;
-            _tableInfo.SetTableInfo($"Round {count + 1}\nStarting..", roundStart.Interval);
+            _tableInfo.SetTableInfo($"Round {MatchPresenter.Model.RoundId + 1}\nStarting..", 5);
         }
 
-        private void Exit()
+        public void Exit()
         {
-            MatchService.LeaveMatch();
+            MatchPresenter.LeaveMatch();
             SceneController.ChangeTopScene("MenuScene").Forget();
         }
     }

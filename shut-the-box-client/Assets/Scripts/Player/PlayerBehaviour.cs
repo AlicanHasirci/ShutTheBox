@@ -10,10 +10,17 @@ using DisposableBag = MessagePipe.DisposableBag;
 
 namespace Player
 {
+    using TMPro;
+
     public class PlayerBehaviour : MonoBehaviour, IDisposable
     {
+        private const string ScoreFormat = "Score: {0}";
+        
         [SerializeField]
         private BoxBehaviour _boxBehaviour;
+
+        [SerializeField]
+        private TMP_Text _scoreText;
 
         [SerializeField]
         private DiceManager _diceManager;
@@ -26,8 +33,14 @@ namespace Player
                 presenter.OnState.Subscribe(StateChange),
                 presenter.OnRoll.Subscribe(RollReceived),
                 presenter.OnBox.Subscribe(_boxBehaviour.SetState),
+                presenter.OnScore.Subscribe(ScoreChange),
                 _boxBehaviour.OnClick.Subscribe(presenter.TileToggle)
             );
+        }
+
+        private void ScoreChange(int score)
+        {
+            _scoreText.text = string.Format(ScoreFormat, score);
         }
 
         public void Dispose()

@@ -15,6 +15,20 @@ namespace Match
         Left
     }
 
+    public enum ResultType
+    {
+        Tie,
+        Win,
+        Lose
+    }
+
+    public struct MatchResult
+    {
+        public ResultType Type;
+        public int Player { get; set; }
+        public int Opponent { get; set; }
+    }
+
     public interface IMatchPresenter
     {
         MatchModel Model { get; }
@@ -22,26 +36,33 @@ namespace Match
         void CancelMatchmaking();
         void LeaveMatch();
         ISubscriber<MatchEvent> OnMatchEvent { get; }
+        ISubscriber<MatchResult> OnMatchResult { get; }
     }
     
     public class MatchPresenter : IMatchPresenter, IDisposable
     {
         public MatchModel Model { get; private set; }
         public ISubscriber<MatchEvent> OnMatchEvent { get; }
+        public ISubscriber<MatchResult> OnMatchResult { get; }
         
+        private readonly INetworkService _networkService;
         private readonly IMatchService _matchService;
-        private readonly IPublisher<MatchEvent> _publisher;
+        private readonly IDisposablePublisher<MatchEvent> _eventPublisher;
+        private readonly IDisposablePublisher<MatchResult> _resultPublisher;
         private readonly IDisposable _disposable;
 
-        public MatchPresenter(IMatchService matchService, ISubscriber<MatchEvent> subscriber, IPublisher<MatchEvent> publisher)
+        public MatchPresenter(INetworkService networkService, IMatchService matchService, EventFactory eventFactory)
         {
+            _networkService = networkService;
             _matchService = matchService;
-            OnMatchEvent = subscriber;
-            _publisher = publisher;
+            (_eventPublisher, OnMatchEvent) = eventFactory.CreateEvent<MatchEvent>();
+            (_resultPublisher, OnMatchResult) = eventFactory.CreateEvent<MatchResult>();
             _disposable = DisposableBag.Create(
                 _matchService.OnMatchStart.Subscribe(OnMatchStart),
                 _matchService.OnRoundStart.Subscribe(OnRoundStart),
-                _matchService.OnMatchOver.Subscribe(OnMatchOver)
+                _matchService.OnMatchOver.Subscribe(OnMatchOver),
+                _eventPublisher,
+                _resultPublisher
             );
         }
 
@@ -55,10 +76,10 @@ namespace Match
             Model = new MatchModel
             {
                 Players = new List<PlayerModel>(match.Players.Count),
-                Rounds = new List<RoundModel>(match.RoundCount),
                 MatchId = _matchService.MatchId,
                 TileCount = match.TileCount,
                 TurnTime = match.TurnTime,
+                RoundId = 0
             };
             
             foreach (Player player in match.Players)
@@ -68,37 +89,64 @@ namespace Match
                 {
                     playerModel.Tiles[i] = (TileState)player.Tiles[i]; 
                 }
+                playerModel.Score = player.Score;
                 Model.Players.Add(playerModel);
             }
-            _publisher.Publish(MatchEvent.Joined);
+            _eventPublisher.Publish(MatchEvent.Joined);
         }
 
         private void OnRoundStart(RoundStart roundStart)
         {
-            Model.Rounds.Add(new RoundModel(roundStart.Score.Players, roundStart.Score.Scores));
+            Model.RoundId = roundStart.RoundId;
         }
 
         private void OnMatchOver(MatchOver matchOver)
         {
-            
+            MatchResult result = new();
+            for (int i = 0; i < matchOver.Scores.Count; i++)
+            {
+                PlayerScore score = matchOver.Scores[i];
+                if (score.PlayerId.Equals(_networkService.PlayerId))
+                {
+                    result.Player = score.Score;
+                }
+                else
+                {
+                    result.Opponent = score.Score;
+                }
+            }
+
+            if (result.Player == result.Opponent)
+            {
+                result.Type = ResultType.Tie;
+            } 
+            else if (result.Opponent > result.Player)
+            {
+                result.Type = ResultType.Lose;
+            }
+            else
+            {
+                result.Type = ResultType.Win;
+            }
+            _resultPublisher.Publish(result);
         }
 
         public void StartMatchmaking()
         {
             _matchService.StartMatchmaking();
-            _publisher.Publish(MatchEvent.Searching);
+            _eventPublisher.Publish(MatchEvent.Searching);
         }
 
         public void CancelMatchmaking()
         {
             _matchService.CancelMatchmaking();
-            _publisher.Publish(MatchEvent.Canceled);
+            _eventPublisher.Publish(MatchEvent.Canceled);
         }
 
         public void LeaveMatch()
         {
             _matchService.LeaveMatch();
-            _publisher.Publish(MatchEvent.Left);
+            _eventPublisher.Publish(MatchEvent.Left);
         }
     }
 }

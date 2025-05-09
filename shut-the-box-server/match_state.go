@@ -19,9 +19,9 @@ const (
 type MatchState struct {
 	presences       map[string]runtime.Presence
 	players         []*api.Player
-	rounds          []*api.RoundScore
 	matchState      MatchStatus
 	random          *rand.Rand
+	roundId         int
 	playerIndex     int
 	readyCount      int
 	joinsInProgress int
@@ -33,8 +33,8 @@ func NewMatchState(playerCount int) *MatchState {
 	return &MatchState{
 		presences:   make(map[string]runtime.Presence, playerCount),
 		players:     make([]*api.Player, playerCount),
-		rounds:      make([]*api.RoundScore, 0, roundCount),
 		random:      rand.New(rand.NewSource(time.Now().UnixNano())),
+		roundId:     0,
 		emptyTicks:  0,
 		playerIndex: 0,
 	}
@@ -81,20 +81,6 @@ func (ms *MatchState) GetPlayer(presence runtime.Presence) *Player {
 			}
 		}
 		return (*Player)(player)
-	}
-}
-
-func (ms *MatchState) GetRoundScore() *api.RoundScore {
-	players := make([]string, len(ms.players))
-	scores := make([]int32, len(ms.players))
-
-	for i, p := range ms.players {
-		players[i] = p.PlayerId
-		scores[i] = int32((*Player)(p).GetScore())
-	}
-	return &api.RoundScore{
-		Players: players,
-		Scores:  scores,
 	}
 }
 

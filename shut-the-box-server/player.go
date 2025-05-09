@@ -11,6 +11,7 @@ func NewPlayer(presence runtime.Presence, tileCount int) *api.Player {
 	player := &api.Player{
 		PlayerId: presence.GetUserId(),
 		State:    api.PlayerState_IDLE,
+		Score:    0,
 		Tiles:    make([]api.TileState, tileCount),
 	}
 	for t := 0; t < tileCount; t++ {
@@ -46,7 +47,7 @@ func (p *Player) RollDice(state *MatchState) {
 	}
 }
 
-func (p *Player) TryConfirm() bool {
+func (p *Player) TryConfirm() (bool, int32) {
 	sum := 0
 	for i, tile := range p.Tiles {
 		if tile == api.TileState_TOGGLE {
@@ -54,6 +55,8 @@ func (p *Player) TryConfirm() bool {
 		}
 	}
 	if int(p.Roll) == sum {
+		score := int32(p.GetScore())
+		p.Score += score
 		for i, tile := range p.Tiles {
 			if tile != api.TileState_TOGGLE {
 				continue
@@ -61,9 +64,9 @@ func (p *Player) TryConfirm() bool {
 			p.Tiles[i] = api.TileState_SHUT
 		}
 		p.State = api.PlayerState_IDLE
-		return true
+		return true, score
 	} else {
-		return false
+		return false, 0
 	}
 }
 
@@ -97,7 +100,7 @@ func (p *Player) HasMoves() bool {
 func (p *Player) GetScore() int {
 	sum := 0
 	for i, tile := range p.Tiles {
-		if tile == api.TileState_SHUT {
+		if tile == api.TileState_TOGGLE {
 			sum += i + 1
 		}
 	}

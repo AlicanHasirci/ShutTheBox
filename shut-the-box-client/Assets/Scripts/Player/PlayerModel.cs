@@ -3,6 +3,8 @@ using Sirenix.OdinInspector;
 
 namespace Player
 {
+    using UnityEngine.Serialization;
+
     [EnumToggleButtons]
     public enum TileState
     {
@@ -25,6 +27,7 @@ namespace Player
         public string PlayerId;
         public PlayerState State;
         public TileState[] Tiles;
+        [FormerlySerializedAs("PlayerScore")] public int Score;
         public int Roll;
 
         public PlayerModel(string playerId, int tileCount)

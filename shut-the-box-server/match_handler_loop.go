@@ -46,6 +46,7 @@ func (m MatchHandler) matchWaiting(logger runtime.Logger, dispatcher runtime.Mat
 		RoundCount: int32(roundCount),
 		TileCount:  int32(tileCount),
 		TurnTime:   int32(turnTime),
+		RoundId:    int32(0),
 	}); err == nil {
 		_ = dispatcher.BroadcastMessage(int64(api.OpCode_MATCH_START), buf, nil, nil, true)
 	}
@@ -59,15 +60,8 @@ func (m MatchHandler) matchStarting(logger runtime.Logger, dispatcher runtime.Ma
 		return
 	}
 	if state.pauseTicks == roundInterval*tickRate {
-		var score *api.RoundScore
-		if len(state.rounds) == 0 {
-			score = nil
-		} else {
-			score = state.rounds[len(state.rounds)-1]
-		}
 		if buf, err := m.marshaler.Marshal(&api.RoundStart{
-			Interval: int32(roundInterval),
-			Score:    score,
+			RoundId: int32(state.roundId),
 		}); err == nil {
 			_ = dispatcher.BroadcastMessage(int64(api.OpCode_ROUND_START), buf, nil, nil, true)
 		}
@@ -116,11 +110,12 @@ func (m MatchHandler) processMessages(logger runtime.Logger, dispatcher runtime.
 			}
 
 		case api.OpCode_PLAYER_CONF:
-			if player.TryConfirm() {
+			if confirmed, score := player.TryConfirm(); confirmed {
 				if buf, err := m.marshaler.Marshal(&api.PlayerConfirm{
 					PlayerId: player.PlayerId,
 					Tiles:    player.Tiles,
 					BoxShut:  player.BoxShut(),
+					Score:    score,
 				}); err == nil {
 					_ = dispatcher.BroadcastMessage(int64(api.OpCode_PLAYER_CONF), buf, nil, nil, true)
 				}
@@ -152,21 +147,32 @@ func (m MatchHandler) sendTurn(dispatcher runtime.MatchDispatcher, state *MatchS
 }
 
 func (m MatchHandler) roundFinished(dispatcher runtime.MatchDispatcher, state *MatchState) {
-	score := state.GetRoundScore()
-	state.rounds = append(state.rounds, score)
+	state.roundId += 1
+
 	for _, p := range state.players {
 		(*Player)(p).Reset()
 	}
-	if len(state.rounds) == roundCount {
-		state.matchState = Complete
-		if buf, err := m.marshaler.Marshal(&api.MatchOver{
-			Winner: state.players[0].PlayerId, //FIXME
-			Rounds: state.rounds,
-		}); err == nil {
-			_ = dispatcher.BroadcastMessage(int64(api.OpCode_MATCH_OVER), buf, nil, nil, true)
-		}
+	if state.roundId == roundCount {
+		m.matchFinished(dispatcher, state)
 	} else {
 		state.matchState = Starting
 		state.pauseTicks = roundInterval * tickRate
+	}
+}
+
+func (m MatchHandler) matchFinished(dispatcher runtime.MatchDispatcher, state *MatchState) {
+	state.matchState = Complete
+
+	scores := make([]*api.PlayerScore, len(state.players))
+	for i, player := range state.players {
+		scores[i] = &api.PlayerScore{
+			PlayerId: player.PlayerId,
+			Score:    player.Score,
+		}
+	}
+	if buf, err := m.marshaler.Marshal(&api.MatchOver{
+		Scores: scores,
+	}); err == nil {
+		_ = dispatcher.BroadcastMessage(int64(api.OpCode_MATCH_OVER), buf, nil, nil, true)
 	}
 }
