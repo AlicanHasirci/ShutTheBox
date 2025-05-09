@@ -37,7 +37,7 @@ func (m MatchHandler) matchWaiting(logger runtime.Logger, dispatcher runtime.Mat
 
 	index := 0
 	for _, v := range state.presences {
-		state.players[index] = NewPlayer(v, tileCount)
+		state.players[index] = NewPlayer(v, tileCount, diceCount)
 		index++
 	}
 
@@ -94,7 +94,7 @@ func (m MatchHandler) processMessages(logger runtime.Logger, dispatcher runtime.
 				player.RollDice(state)
 				if buf, err := m.marshaler.Marshal(&api.PlayerRoll{
 					PlayerId: player.PlayerId,
-					Roll:     player.Roll,
+					Rolls:    player.Rolls,
 				}); err == nil {
 					_ = dispatcher.BroadcastMessage(int64(api.OpCode_PLAYER_ROLL), buf, nil, nil, true)
 				}

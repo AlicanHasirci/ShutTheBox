@@ -30,22 +30,22 @@ namespace Network {
             "LQoJTWF0Y2hPdmVyEiAKBnNjb3JlcxgBIAMoCzIQLkFwaS5QbGF5ZXJTY29y",
             "ZSIuCgtQbGF5ZXJTY29yZRIQCghwbGF5ZXJJZBgBIAEoCRINCgVzY29yZRgC",
             "IAEoBSIdCgpSb3VuZFN0YXJ0Eg8KB3JvdW5kSWQYASABKAUiHgoKUGxheWVy",
-            "VHVybhIQCghwbGF5ZXJJZBgBIAEoCSIsCgpQbGF5ZXJSb2xsEhAKCHBsYXll",
-            "cklkGAEgASgJEgwKBHJvbGwYAiABKAUiTAoKUGxheWVyTW92ZRIQCghwbGF5",
-            "ZXJJZBgBIAEoCRINCgVpbmRleBgCIAEoBRIdCgVzdGF0ZRgDIAEoDjIOLkFw",
-            "aS5UaWxlU3RhdGUiYAoNUGxheWVyQ29uZmlybRIQCghwbGF5ZXJJZBgBIAEo",
-            "CRIdCgV0aWxlcxgCIAMoDjIOLkFwaS5UaWxlU3RhdGUSDwoHYm94U2h1dBgD",
-            "IAEoCBINCgVzY29yZRgEIAEoBSJ3CgZQbGF5ZXISEAoIcGxheWVySWQYASAB",
-            "KAkSDQoFc2NvcmUYAiABKAUSDAoEcm9sbBgDIAEoBRIfCgVTdGF0ZRgEIAEo",
-            "DjIQLkFwaS5QbGF5ZXJTdGF0ZRIdCgV0aWxlcxgFIAMoDjIOLkFwaS5UaWxl",
-            "U3RhdGUqsgEKBk9wQ29kZRIPCgtVTlNQRUNJRklFRBAAEg8KC01BVENIX1NU",
-            "QVJUEAESDgoKTUFUQ0hfT1ZFUhACEg8KC1JPVU5EX1NUQVJUEAMSEAoMUExB",
-            "WUVSX1JFQURZEAQSDwoLUExBWUVSX1RVUk4QBRIPCgtQTEFZRVJfUk9MTBAG",
-            "Eg8KC1BMQVlFUl9NT1ZFEAcSDwoLUExBWUVSX0NPTkYQCBIPCgtQTEFZRVJf",
-            "RkFJTBAJKisKCVRpbGVTdGF0ZRIICgRPUEVOEAASCgoGVE9HR0xFEAESCAoE",
-            "U0hVVBACKj8KC1BsYXllclN0YXRlEggKBElETEUQABIICgRST0xMEAESCAoE",
-            "UExBWRACEggKBEZBSUwQAxIICgRET05FEARCI1oXc2h1dC10aGUtYm94LXNl",
-            "cnZlci9hcGmqAgdOZXR3b3JrYgZwcm90bzM="));
+            "VHVybhIQCghwbGF5ZXJJZBgBIAEoCSItCgpQbGF5ZXJSb2xsEhAKCHBsYXll",
+            "cklkGAEgASgJEg0KBXJvbGxzGAIgAygFIkwKClBsYXllck1vdmUSEAoIcGxh",
+            "eWVySWQYASABKAkSDQoFaW5kZXgYAiABKAUSHQoFc3RhdGUYAyABKA4yDi5B",
+            "cGkuVGlsZVN0YXRlImAKDVBsYXllckNvbmZpcm0SEAoIcGxheWVySWQYASAB",
+            "KAkSHQoFdGlsZXMYAiADKA4yDi5BcGkuVGlsZVN0YXRlEg8KB2JveFNodXQY",
+            "AyABKAgSDQoFc2NvcmUYBCABKAUieAoGUGxheWVyEhAKCHBsYXllcklkGAEg",
+            "ASgJEg0KBXNjb3JlGAIgASgFEh8KBVN0YXRlGAMgASgOMhAuQXBpLlBsYXll",
+            "clN0YXRlEg0KBXJvbGxzGAQgAygFEh0KBXRpbGVzGAUgAygOMg4uQXBpLlRp",
+            "bGVTdGF0ZSqyAQoGT3BDb2RlEg8KC1VOU1BFQ0lGSUVEEAASDwoLTUFUQ0hf",
+            "U1RBUlQQARIOCgpNQVRDSF9PVkVSEAISDwoLUk9VTkRfU1RBUlQQAxIQCgxQ",
+            "TEFZRVJfUkVBRFkQBBIPCgtQTEFZRVJfVFVSThAFEg8KC1BMQVlFUl9ST0xM",
+            "EAYSDwoLUExBWUVSX01PVkUQBxIPCgtQTEFZRVJfQ09ORhAIEg8KC1BMQVlF",
+            "Ul9GQUlMEAkqKwoJVGlsZVN0YXRlEggKBE9QRU4QABIKCgZUT0dHTEUQARII",
+            "CgRTSFVUEAIqPwoLUGxheWVyU3RhdGUSCAoESURMRRAAEggKBFJPTEwQARII",
+            "CgRQTEFZEAISCAoERkFJTBADEggKBERPTkUQBEIjWhdzaHV0LXRoZS1ib3gt",
+            "c2VydmVyL2FwaaoCB05ldHdvcmtiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Network.OpCode), typeof(global::Network.TileState), typeof(global::Network.PlayerState), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -54,10 +54,10 @@ namespace Network {
             new pbr::GeneratedClrTypeInfo(typeof(global::Network.PlayerScore), global::Network.PlayerScore.Parser, new[]{ "PlayerId", "Score" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Network.RoundStart), global::Network.RoundStart.Parser, new[]{ "RoundId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Network.PlayerTurn), global::Network.PlayerTurn.Parser, new[]{ "PlayerId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Network.PlayerRoll), global::Network.PlayerRoll.Parser, new[]{ "PlayerId", "Roll" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Network.PlayerRoll), global::Network.PlayerRoll.Parser, new[]{ "PlayerId", "Rolls" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Network.PlayerMove), global::Network.PlayerMove.Parser, new[]{ "PlayerId", "Index", "State" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Network.PlayerConfirm), global::Network.PlayerConfirm.Parser, new[]{ "PlayerId", "Tiles", "BoxShut", "Score" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Network.Player), global::Network.Player.Parser, new[]{ "PlayerId", "Score", "Roll", "State", "Tiles" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Network.Player), global::Network.Player.Parser, new[]{ "PlayerId", "Score", "State", "Rolls", "Tiles" }, null, null, null, null)
           }));
     }
     #endregion
@@ -1283,7 +1283,7 @@ namespace Network {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public PlayerRoll(PlayerRoll other) : this() {
       playerId_ = other.playerId_;
-      roll_ = other.roll_;
+      rolls_ = other.rolls_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1305,16 +1305,15 @@ namespace Network {
       }
     }
 
-    /// <summary>Field number for the "roll" field.</summary>
-    public const int RollFieldNumber = 2;
-    private int roll_;
+    /// <summary>Field number for the "rolls" field.</summary>
+    public const int RollsFieldNumber = 2;
+    private static readonly pb::FieldCodec<int> _repeated_rolls_codec
+        = pb::FieldCodec.ForInt32(18);
+    private readonly pbc::RepeatedField<int> rolls_ = new pbc::RepeatedField<int>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int Roll {
-      get { return roll_; }
-      set {
-        roll_ = value;
-      }
+    public pbc::RepeatedField<int> Rolls {
+      get { return rolls_; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1333,7 +1332,7 @@ namespace Network {
         return true;
       }
       if (PlayerId != other.PlayerId) return false;
-      if (Roll != other.Roll) return false;
+      if(!rolls_.Equals(other.rolls_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1342,7 +1341,7 @@ namespace Network {
     public override int GetHashCode() {
       int hash = 1;
       if (PlayerId.Length != 0) hash ^= PlayerId.GetHashCode();
-      if (Roll != 0) hash ^= Roll.GetHashCode();
+      hash ^= rolls_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1365,10 +1364,7 @@ namespace Network {
         output.WriteRawTag(10);
         output.WriteString(PlayerId);
       }
-      if (Roll != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(Roll);
-      }
+      rolls_.WriteTo(output, _repeated_rolls_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -1383,10 +1379,7 @@ namespace Network {
         output.WriteRawTag(10);
         output.WriteString(PlayerId);
       }
-      if (Roll != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(Roll);
-      }
+      rolls_.WriteTo(ref output, _repeated_rolls_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -1400,9 +1393,7 @@ namespace Network {
       if (PlayerId.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(PlayerId);
       }
-      if (Roll != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Roll);
-      }
+      size += rolls_.CalculateSize(_repeated_rolls_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -1418,9 +1409,7 @@ namespace Network {
       if (other.PlayerId.Length != 0) {
         PlayerId = other.PlayerId;
       }
-      if (other.Roll != 0) {
-        Roll = other.Roll;
-      }
+      rolls_.Add(other.rolls_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -1444,8 +1433,9 @@ namespace Network {
             PlayerId = input.ReadString();
             break;
           }
+          case 18:
           case 16: {
-            Roll = input.ReadInt32();
+            rolls_.AddEntriesFrom(input, _repeated_rolls_codec);
             break;
           }
         }
@@ -1471,8 +1461,9 @@ namespace Network {
             PlayerId = input.ReadString();
             break;
           }
+          case 18:
           case 16: {
-            Roll = input.ReadInt32();
+            rolls_.AddEntriesFrom(ref input, _repeated_rolls_codec);
             break;
           }
         }
@@ -2091,8 +2082,8 @@ namespace Network {
     public Player(Player other) : this() {
       playerId_ = other.playerId_;
       score_ = other.score_;
-      roll_ = other.roll_;
       state_ = other.state_;
+      rolls_ = other.rolls_.Clone();
       tiles_ = other.tiles_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -2127,20 +2118,8 @@ namespace Network {
       }
     }
 
-    /// <summary>Field number for the "roll" field.</summary>
-    public const int RollFieldNumber = 3;
-    private int roll_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int Roll {
-      get { return roll_; }
-      set {
-        roll_ = value;
-      }
-    }
-
     /// <summary>Field number for the "State" field.</summary>
-    public const int StateFieldNumber = 4;
+    public const int StateFieldNumber = 3;
     private global::Network.PlayerState state_ = global::Network.PlayerState.Idle;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -2149,6 +2128,17 @@ namespace Network {
       set {
         state_ = value;
       }
+    }
+
+    /// <summary>Field number for the "rolls" field.</summary>
+    public const int RollsFieldNumber = 4;
+    private static readonly pb::FieldCodec<int> _repeated_rolls_codec
+        = pb::FieldCodec.ForInt32(34);
+    private readonly pbc::RepeatedField<int> rolls_ = new pbc::RepeatedField<int>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<int> Rolls {
+      get { return rolls_; }
     }
 
     /// <summary>Field number for the "tiles" field.</summary>
@@ -2179,8 +2169,8 @@ namespace Network {
       }
       if (PlayerId != other.PlayerId) return false;
       if (Score != other.Score) return false;
-      if (Roll != other.Roll) return false;
       if (State != other.State) return false;
+      if(!rolls_.Equals(other.rolls_)) return false;
       if(!tiles_.Equals(other.tiles_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -2191,8 +2181,8 @@ namespace Network {
       int hash = 1;
       if (PlayerId.Length != 0) hash ^= PlayerId.GetHashCode();
       if (Score != 0) hash ^= Score.GetHashCode();
-      if (Roll != 0) hash ^= Roll.GetHashCode();
       if (State != global::Network.PlayerState.Idle) hash ^= State.GetHashCode();
+      hash ^= rolls_.GetHashCode();
       hash ^= tiles_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -2220,14 +2210,11 @@ namespace Network {
         output.WriteRawTag(16);
         output.WriteInt32(Score);
       }
-      if (Roll != 0) {
-        output.WriteRawTag(24);
-        output.WriteInt32(Roll);
-      }
       if (State != global::Network.PlayerState.Idle) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(24);
         output.WriteEnum((int) State);
       }
+      rolls_.WriteTo(output, _repeated_rolls_codec);
       tiles_.WriteTo(output, _repeated_tiles_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -2247,14 +2234,11 @@ namespace Network {
         output.WriteRawTag(16);
         output.WriteInt32(Score);
       }
-      if (Roll != 0) {
-        output.WriteRawTag(24);
-        output.WriteInt32(Roll);
-      }
       if (State != global::Network.PlayerState.Idle) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(24);
         output.WriteEnum((int) State);
       }
+      rolls_.WriteTo(ref output, _repeated_rolls_codec);
       tiles_.WriteTo(ref output, _repeated_tiles_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -2272,12 +2256,10 @@ namespace Network {
       if (Score != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Score);
       }
-      if (Roll != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Roll);
-      }
       if (State != global::Network.PlayerState.Idle) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) State);
       }
+      size += rolls_.CalculateSize(_repeated_rolls_codec);
       size += tiles_.CalculateSize(_repeated_tiles_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -2297,12 +2279,10 @@ namespace Network {
       if (other.Score != 0) {
         Score = other.Score;
       }
-      if (other.Roll != 0) {
-        Roll = other.Roll;
-      }
       if (other.State != global::Network.PlayerState.Idle) {
         State = other.State;
       }
+      rolls_.Add(other.rolls_);
       tiles_.Add(other.tiles_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -2332,11 +2312,12 @@ namespace Network {
             break;
           }
           case 24: {
-            Roll = input.ReadInt32();
+            State = (global::Network.PlayerState) input.ReadEnum();
             break;
           }
+          case 34:
           case 32: {
-            State = (global::Network.PlayerState) input.ReadEnum();
+            rolls_.AddEntriesFrom(input, _repeated_rolls_codec);
             break;
           }
           case 42:
@@ -2372,11 +2353,12 @@ namespace Network {
             break;
           }
           case 24: {
-            Roll = input.ReadInt32();
+            State = (global::Network.PlayerState) input.ReadEnum();
             break;
           }
+          case 34:
           case 32: {
-            State = (global::Network.PlayerState) input.ReadEnum();
+            rolls_.AddEntriesFrom(ref input, _repeated_rolls_codec);
             break;
           }
           case 42:

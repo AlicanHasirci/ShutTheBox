@@ -84,6 +84,6 @@ func (ms *MatchState) GetPlayer(presence runtime.Presence) *Player {
 	}
 }
 
-func (ms *MatchState) GetRoll() int {
-	return ms.random.Intn(11) + 2
+func (ms *MatchState) GetRoll() int32 {
+	return ms.random.Int31n(5) + 1
 }

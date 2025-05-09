@@ -58,7 +58,7 @@ message PlayerTurn  {
 
 message PlayerRoll {
   string playerId = 1;
-  int32 roll = 2;
+  repeated int32 rolls = 2;
 }
 
 message PlayerMove {
@@ -77,7 +77,7 @@ message PlayerConfirm {
 message Player {
   string playerId = 1;
   int32 score = 2;
-  int32 roll = 3;
-  PlayerState State = 4;
+  PlayerState State = 3;
+  repeated int32 rolls = 4;
   repeated TileState tiles = 5;
 }

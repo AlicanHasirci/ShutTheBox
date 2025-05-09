@@ -8,8 +8,9 @@ namespace Player
 
     public interface IPlayerPresenter
     {
+        PlayerModel Model { get; }
         ISubscriber<PlayerState> OnState { get; }
-        IAsyncSubscriber<(int, bool)> OnRoll { get; }
+        IAsyncSubscriber<(int[], bool)> OnRoll { get; }
         ISubscriber<TileState[]> OnBox { get; }
         ISubscriber<int> OnScore { get; }
         void TileToggle(int index);
@@ -18,16 +19,16 @@ namespace Player
 
     public class PlayerPresenter : IPlayerPresenter, IDisposable
     {
+        public PlayerModel Model { get; }
         public ISubscriber<PlayerState> OnState { get; }
-        public IAsyncSubscriber<(int, bool)> OnRoll { get; }
+        public IAsyncSubscriber<(int[], bool)> OnRoll { get; }
         public ISubscriber<TileState[]> OnBox { get; }
         public ISubscriber<int> OnScore { get; }
 
-        protected readonly PlayerModel Model;
         protected readonly IPlayerService Service;
         protected readonly IDisposablePublisher<PlayerState> StatePublisher;
         protected readonly IDisposablePublisher<TileState[]> BoxPublisher;
-        protected readonly IDisposableAsyncPublisher<(int, bool)> RollPublisher;
+        protected readonly IDisposableAsyncPublisher<(int[], bool)> RollPublisher;
         protected readonly IDisposablePublisher<int> ScorePublisher;
 
         private readonly IDisposable _disposable;
@@ -41,7 +42,7 @@ namespace Player
         {
             (StatePublisher, OnState) = eventFactory.CreateEvent<PlayerState>();
             (BoxPublisher, OnBox) = eventFactory.CreateEvent<TileState[]>();
-            (RollPublisher, OnRoll) = eventFactory.CreateAsyncEvent< (int, bool)>();
+            (RollPublisher, OnRoll) = eventFactory.CreateAsyncEvent< (int[], bool)>();
             (ScorePublisher, OnScore) = eventFactory.CreateEvent<int>();
 
             Model = model;
@@ -66,15 +67,19 @@ namespace Player
             ScorePublisher.Publish(Model.Score);
             if (Model.State is PlayerState.Play)
             {
-                RollPublisher.Publish((Model.Roll, true));
+                RollPublisher.Publish((Model.Rolls, true));
             }
         }
 
         public void Reset()
         {
             Model.State = PlayerState.Idle;
-            Model.Roll = -1;
 
+            for (var i = 0; i < Model.Rolls.Length; i++)
+            {
+                Model.Rolls[i] = 0;
+            }
+            
             for (var i = 0; i < Model.Tiles.Length; i++)
             {
                 Model.Tiles[i] = TileState.Open;
@@ -110,8 +115,13 @@ namespace Player
             {
                 return;
             }
-            Model.Roll = playerRoll.Roll;
-            await RollPublisher.PublishAsync((playerRoll.Roll, false));
+
+            for (int i = 0; i < Model.Rolls.Length; i++)
+            {
+                Model.Rolls[i] = playerRoll.Rolls[i];
+            }
+            
+            await RollPublisher.PublishAsync((Model.Rolls, false));
         }
 
         protected virtual void OnPlayerMove(PlayerMove playerMove)

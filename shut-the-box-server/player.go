@@ -7,11 +7,12 @@ import (
 
 type Player api.Player
 
-func NewPlayer(presence runtime.Presence, tileCount int) *api.Player {
+func NewPlayer(presence runtime.Presence, tileCount int, diceCount int) *api.Player {
 	player := &api.Player{
 		PlayerId: presence.GetUserId(),
 		State:    api.PlayerState_IDLE,
 		Score:    0,
+		Rolls:    make([]int32, diceCount),
 		Tiles:    make([]api.TileState, tileCount),
 	}
 	for t := 0; t < tileCount; t++ {
@@ -39,7 +40,10 @@ func (p *Player) Toggle(index int) api.TileState {
 }
 
 func (p *Player) RollDice(state *MatchState) {
-	p.Roll = int32(state.GetRoll())
+	for i := range p.Rolls {
+		p.Rolls[i] = state.GetRoll()
+	}
+
 	if p.HasMoves() {
 		p.State = api.PlayerState_PLAY
 	} else {
@@ -54,7 +58,7 @@ func (p *Player) TryConfirm() (bool, int32) {
 			sum += i + 1
 		}
 	}
-	if int(p.Roll) == sum {
+	if int(p.TotalRoll()) == sum {
 		score := int32(p.GetScore())
 		p.Score += score
 		for i, tile := range p.Tiles {
@@ -83,6 +87,14 @@ func (p *Player) Revert() {
 	}
 }
 
+func (p *Player) TotalRoll() int32 {
+	sum := int32(0)
+	for _, roll := range p.Rolls {
+		sum += roll
+	}
+	return sum
+}
+
 func (p *Player) BoxShut() bool {
 	for _, tile := range p.Tiles {
 		if tile == api.TileState_OPEN || tile == api.TileState_TOGGLE {
@@ -94,7 +106,7 @@ func (p *Player) BoxShut() bool {
 }
 
 func (p *Player) HasMoves() bool {
-	return canMakeSum(p.Tiles, int(p.Roll), 0)
+	return canMakeSum(p.Tiles, int(p.TotalRoll()), 0)
 }
 
 func (p *Player) GetScore() int {

@@ -27,15 +27,29 @@ namespace Player
         public string PlayerId;
         public PlayerState State;
         public TileState[] Tiles;
-        [FormerlySerializedAs("PlayerScore")] public int Score;
-        public int Roll;
+        public int[] Rolls;
+        public int Score;
 
-        public PlayerModel(string playerId, int tileCount)
+        public int TotalRoll
+        {
+            get
+            {
+                int total = 0;
+                for (int i = 0; i < Rolls.Length; i++)
+                {
+                    total += Rolls[i];
+                }
+
+                return total;
+            }
+        }
+
+        public PlayerModel(string playerId, int tileCount, int diceCount)
         {
             PlayerId = playerId;
             State = PlayerState.Idle;
             Tiles = new TileState[tileCount];
-            Roll = -1;
+            Rolls = new int[diceCount];
 
             for (var i = 0; i < tileCount; i++)
             {

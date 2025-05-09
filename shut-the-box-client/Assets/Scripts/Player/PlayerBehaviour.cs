@@ -25,13 +25,15 @@ namespace Player
         [SerializeField]
         private DiceManager _diceManager;
 
+        private IPlayerPresenter _presenter;
         private IDisposable _disposable;
 
         public void Initialize(IPlayerPresenter presenter)
         {
+            _presenter = presenter;
             _disposable = DisposableBag.Create(
                 presenter.OnState.Subscribe(StateChange),
-                presenter.OnRoll.Subscribe(RollReceived),
+                presenter.OnRoll.Subscribe(OnPlayerRoll),
                 presenter.OnBox.Subscribe(_boxBehaviour.SetState),
                 presenter.OnScore.Subscribe(ScoreChange),
                 _boxBehaviour.OnClick.Subscribe(presenter.TileToggle)
@@ -56,9 +58,9 @@ namespace Player
             _diceManager.CacheRollData();
         }
 
-        private async UniTask RollReceived((int value, bool skip) roll, CancellationToken token = default)
+        private async UniTask OnPlayerRoll((int[] rolls, bool skip) roll, CancellationToken token = default)
         {
-            await _diceManager.RollDice(roll.value, roll.skip, token);
+            await _diceManager.RollDice(_presenter.Model.Rolls, roll.skip, token);
         }
 
         private void OnDestroy()

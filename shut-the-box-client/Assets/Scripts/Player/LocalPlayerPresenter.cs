@@ -96,8 +96,7 @@ namespace Player
             {
                 return;
             }
-            Model.Roll = playerRoll.Roll;
-            await RollPublisher.PublishAsync((playerRoll.Roll, false));
+            base.OnPlayerRoll(playerRoll);
             SetState(HasMoves() ? PlayerState.Play : PlayerState.Fail);
         }
 
@@ -130,11 +129,11 @@ namespace Player
                     continue;
                 sum += i + 1;
             }
-            return Model.Roll == sum;
+            return Model.TotalRoll == sum;
         }
 
         private bool HasMoves() {
-            return CanMakeSum(Model.Roll);
+            return CanMakeSum(Model.TotalRoll);
         }
          
         private bool CanMakeSum(int target, int index = 0) {

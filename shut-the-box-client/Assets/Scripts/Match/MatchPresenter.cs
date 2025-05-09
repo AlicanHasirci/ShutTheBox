@@ -84,7 +84,7 @@ namespace Match
             
             foreach (Player player in match.Players)
             {
-                PlayerModel playerModel = new(player.PlayerId, match.TileCount);
+                PlayerModel playerModel = new(player.PlayerId, match.TileCount, player.Rolls.Count);
                 for (int i = 0; i < playerModel.Tiles.Length; i++)
                 {
                     playerModel.Tiles[i] = (TileState)player.Tiles[i]; 

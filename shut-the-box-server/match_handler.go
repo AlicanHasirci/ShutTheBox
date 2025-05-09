@@ -15,6 +15,7 @@ const (
 	playerCount   = 2
 	roundCount    = 2
 	tileCount     = 9
+	diceCount     = 2
 	turnTime      = 0
 )
 

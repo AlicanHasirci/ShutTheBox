@@ -1,14 +1,14 @@
-using System;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading;
-using Cysharp.Threading.Tasks;
-using Sirenix.OdinInspector;
-using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Player.Dice
 {
+    using System.Linq;
+    using System.Runtime.CompilerServices;
+    using System.Threading;
+    using Cysharp.Threading.Tasks;
+    using Sirenix.OdinInspector;
+    using UnityEngine;
+    using Random = UnityEngine.Random;
+    
     public class DiceManager : MonoBehaviour
     {
         [SerializeField]
@@ -29,11 +29,9 @@ namespace Player.Dice
         private FrameData[] _iFrames;
         private Vector3[] _positions;
         private bool _cached;
-        private int[] _rolls;
 
         public void Awake()
         {
-            _rolls = new int[_dice.Length];
             _iFrames = new FrameData[_dice.Length];
             _positions = new Vector3[_dice.Length];
             for (var i = 0; i < _dice.Length; i++)
@@ -122,18 +120,17 @@ namespace Player.Dice
         }
 
         [Button]
-        public async UniTask RollDice(int roll, bool skip = false, CancellationToken token = default)
+        public async UniTask RollDice(int[] roll, bool skip = false, CancellationToken token = default)
         {
             if (!_cached)
             {
                 CacheRollData();
             }
-            GenerateDiceSum(ref _rolls, 6, roll);
 
-            for (var i = 0; i < _dice.Length; i++)
+            for (int i = 0; i < _dice.Length; i++)
             {
                 _dice[i].Frames[^1].Play();
-                _dice[i].Adjust(_rolls[i]);
+                _dice[i].Adjust(roll[i]);
             }
 
             if (skip) return;
@@ -151,33 +148,6 @@ namespace Player.Dice
         private bool CheckCocked()
         {
             return _dice.Aggregate(false, (current, t) => current | t.IsCocked());
-        }
-
-        private static void GenerateDiceSum(ref int[] rolls, int fCount, int target)
-        {
-            var dCount = rolls.Length;
-            if (target < rolls.Length || target > dCount * fCount)
-            {
-                throw new ArgumentException(
-                    $"Target sum is not achievable with the given number of dice and face count: {target}"
-                );
-            }
-
-            var remainder = target;
-            for (var i = 0; i < dCount; i++)
-            {
-                var rd = dCount - (i + 1);
-                var min = Math.Max(remainder - rd * fCount, 1);
-                var max = Math.Min(remainder - rd, fCount);
-                rolls[i] = Random.Range(min, max + 1);
-                remainder -= rolls[i];
-            }
-
-            for (var i = rolls.Length - 1; i > 0; i--)
-            {
-                var swapIndex = Random.Range(0, i + 1);
-                (rolls[i], rolls[swapIndex]) = (rolls[swapIndex], rolls[i]);
-            }
         }
 
         private void OnDrawGizmosSelected()
