@@ -4,6 +4,7 @@ namespace Player
     using DG.Tweening;
     using MessagePipe;
     using Dice;
+    using Network;
     using R3;
     using Revel.UI;
     using UnityEngine;
@@ -38,11 +39,8 @@ namespace Player
                 Presenter.CanConfirm.Subscribe(CanConfirm),
                 Presenter.OnState.Subscribe(StateChange)
             );
-
             _rollPanel.anchoredPosition = Vector2.zero;
             _turnPanel.anchoredPosition = Vector2.zero;
-
-            Presenter.Ready();
         }
 
         private void OnDestroy()
@@ -67,6 +65,11 @@ namespace Player
             SetPanelVisibility(_rollPanel, state is PlayerState.Roll);
             SetPanelVisibility(_turnPanel, state is PlayerState.Play);
             SetPanelVisibility(_failPanel, state is PlayerState.Fail);
+        }
+
+        public void Select(Joker joker)
+        {
+            Presenter.Select(joker);
         }
 
         public void Confirm()

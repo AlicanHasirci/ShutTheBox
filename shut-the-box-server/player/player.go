@@ -1,19 +1,24 @@
-package main
+package player
 
 import (
 	"github.com/heroiclabs/nakama-common/runtime"
+	"maps"
+	"math/rand"
 	"shut-the-box-server/api"
+	"shut-the-box-server/jokers"
+	"slices"
 )
 
 type Player api.Player
 
-func NewPlayer(presence runtime.Presence, tileCount int, diceCount int) *api.Player {
+func NewPlayer(presence runtime.Presence, tileCount int, diceCount int, roundCount int) *api.Player {
 	player := &api.Player{
 		PlayerId: presence.GetUserId(),
 		State:    api.PlayerState_IDLE,
 		Score:    0,
 		Rolls:    make([]int32, diceCount),
 		Tiles:    make([]api.TileState, tileCount),
+		Jokers:   make([]api.Joker, 0, roundCount),
 	}
 	for t := 0; t < tileCount; t++ {
 		player.Tiles[t] = api.TileState_OPEN
@@ -39,9 +44,9 @@ func (p *Player) Toggle(index int) api.TileState {
 	return p.Tiles[index]
 }
 
-func (p *Player) RollDice(state *MatchState) {
+func (p *Player) RollDice(rand *rand.Rand) {
 	for i := range p.Rolls {
-		p.Rolls[i] = state.GetRoll()
+		p.Rolls[i] = rand.Int31n(5) + 1
 	}
 
 	if p.HasMoves() {
@@ -51,27 +56,27 @@ func (p *Player) RollDice(state *MatchState) {
 	}
 }
 
-func (p *Player) TryConfirm() (bool, int32) {
+func (p *Player) CanConfirm() bool {
 	sum := 0
 	for i, tile := range p.Tiles {
 		if tile == api.TileState_TOGGLE {
 			sum += i + 1
 		}
 	}
-	if int(p.TotalRoll()) == sum {
-		score := int32(p.GetScore())
-		p.Score += score
-		for i, tile := range p.Tiles {
-			if tile != api.TileState_TOGGLE {
-				continue
-			}
-			p.Tiles[i] = api.TileState_SHUT
+	return int(p.TotalRoll()) == sum
+}
+
+func (p *Player) Confirm() int32 {
+	score := int32(0)
+	for i, tile := range p.Tiles {
+		if tile != api.TileState_TOGGLE {
+			continue
 		}
-		p.State = api.PlayerState_IDLE
-		return true, score
-	} else {
-		return false, 0
+		p.Tiles[i] = api.TileState_SHUT
+		score = int32(i + 1)
 	}
+	p.State = api.PlayerState_IDLE
+	return score
 }
 
 func (p *Player) Fail() {
@@ -109,14 +114,24 @@ func (p *Player) HasMoves() bool {
 	return canMakeSum(p.Tiles, int(p.TotalRoll()), 0)
 }
 
-func (p *Player) GetScore() int {
-	sum := 0
-	for i, tile := range p.Tiles {
-		if tile == api.TileState_TOGGLE {
-			sum += i + 1
+func (p *Player) GetJokerChoices(rand *rand.Rand) []api.Joker {
+	possible := make([]api.Joker, 0, len(jokers.JokerMap))
+	for j := range maps.Keys(jokers.JokerMap) {
+		if slices.Contains(p.Jokers, j) {
+			continue
+		}
+		possible = append(possible, j)
+	}
+	rand.Shuffle(len(possible), func(i, j int) { possible[i], possible[j] = possible[j], possible[i] })
+
+	choices := make([]api.Joker, 0, 3)
+	for _, j := range possible {
+		choices = append(choices, j)
+		if len(choices) == 3 {
+			break
 		}
 	}
-	return sum
+	return choices
 }
 
 func canMakeSum(s []api.TileState, t int, i int) bool {

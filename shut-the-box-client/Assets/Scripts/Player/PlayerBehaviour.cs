@@ -1,26 +1,19 @@
-using System;
-using System.Threading;
-using Cysharp.Threading.Tasks;
-using MessagePipe;
-using Player.Box;
-using Player.Dice;
-using R3;
-using UnityEngine;
-using DisposableBag = MessagePipe.DisposableBag;
-
 namespace Player
 {
-    using TMPro;
+    using System;
+    using System.Threading;
+    using Cysharp.Threading.Tasks;
+    using MessagePipe;
+    using Box;
+    using Dice;
+    using R3;
+    using UnityEngine;
+    using DisposableBag = MessagePipe.DisposableBag;
 
     public class PlayerBehaviour : MonoBehaviour, IDisposable
     {
-        private const string ScoreFormat = "Score: {0}";
-        
         [SerializeField]
         private BoxBehaviour _boxBehaviour;
-
-        [SerializeField]
-        private TMP_Text _scoreText;
 
         [SerializeField]
         private DiceManager _diceManager;
@@ -35,19 +28,8 @@ namespace Player
                 presenter.OnState.Subscribe(StateChange),
                 presenter.OnRoll.Subscribe(OnPlayerRoll),
                 presenter.OnBox.Subscribe(_boxBehaviour.SetState),
-                presenter.OnScore.Subscribe(ScoreChange),
                 _boxBehaviour.OnClick.Subscribe(presenter.TileToggle)
             );
-        }
-
-        private void ScoreChange(int score)
-        {
-            _scoreText.text = string.Format(ScoreFormat, score);
-        }
-
-        public void Dispose()
-        {
-            _disposable?.Dispose();
         }
 
         private void StateChange(PlayerState state)
@@ -66,6 +48,11 @@ namespace Player
         private void OnDestroy()
         {
             Dispose();
+        }
+
+        public void Dispose()
+        {
+            _disposable?.Dispose();
         }
     }
 }

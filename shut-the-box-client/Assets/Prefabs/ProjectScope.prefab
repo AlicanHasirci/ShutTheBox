@@ -50,3 +50,4 @@ MonoBehaviour:
   autoInjectGameObjects: []
   networkSettings: {fileID: 11400000, guid: 188d95516b6b94bbfb68c63c9f7efffc, type: 2}
   debugServices: {fileID: 11400000, guid: 8301fbaef050a41aba5aae613635247e, type: 2}
+  jokerDatabase: {fileID: 11400000, guid: 4f41c9b59c9b24eebb6cbb796dc2b1cb, type: 2}

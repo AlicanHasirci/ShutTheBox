@@ -11,7 +11,7 @@ namespace Network
     
     public class NetworkPlayerService : IPlayerService, IDisposable
     {
-        public ISubscriber<RoundStart> OnRoundStart { get; }
+        public ISubscriber<JokerSelect> OnJoker { get; }
         public ISubscriber<PlayerTurn> OnTurn { get; }
         public ISubscriber<PlayerRoll> OnRoll { get; }
         public ISubscriber<PlayerMove> OnMove { get; }
@@ -22,7 +22,7 @@ namespace Network
         private readonly ISocket _socket;
         private readonly IMatchService _matchService;
 
-        private readonly IDisposablePublisher<RoundStart> _onRoundStart;
+        private readonly IDisposablePublisher<JokerSelect> _onJoker;
         private readonly IDisposablePublisher<PlayerTurn> _onTurn;
         private readonly IDisposablePublisher<PlayerRoll> _onRoll;
         private readonly IDisposablePublisher<PlayerMove> _onMove;
@@ -42,7 +42,7 @@ namespace Network
             _socket = networkService.Socket;
             _playerId = networkService.PlayerId;
 
-            (_onRoundStart, OnRoundStart) = eventFactory.CreateEvent<RoundStart>();
+            (_onJoker, OnJoker) = eventFactory.CreateEvent<JokerSelect>();
             (_onTurn, OnTurn) = eventFactory.CreateEvent<PlayerTurn>();
             (_onRoll, OnRoll) = eventFactory.CreateEvent<PlayerRoll>();
             (_onMove, OnMove) = eventFactory.CreateEvent<PlayerMove>();
@@ -57,6 +57,7 @@ namespace Network
                         (Action<IMatchState> a) => networkService.Socket.ReceivedMatchState -= a
                     )
                     .Subscribe(ReceivedMatchState),
+                _onJoker,
                 _onTurn,
                 _onRoll,
                 _onMove,
@@ -75,10 +76,10 @@ namespace Network
             OpCode opCode = (OpCode)state.OpCode;
             _logger.Debug($"Received match state: {opCode}");
             switch (opCode)
-            { 
-                case OpCode.RoundStart:
-                    RoundStart roundStart = RoundStart.Parser.ParseFrom(state.State);
-                    _onRoundStart.Publish(roundStart);
+            {
+                case OpCode.PlayerSelect:
+                    JokerSelect jokerSelect = JokerSelect.Parser.ParseFrom(state.State);
+                    _onJoker.Publish(jokerSelect);
                     break;
                 case OpCode.PlayerTurn:
                     PlayerTurn playerTurn = PlayerTurn.Parser.ParseFrom(state.State);
@@ -101,9 +102,10 @@ namespace Network
             }
         }
 
-        public void Ready()
+        public void Select(Joker joker)
         {
-            _socket.SendMatchStateAsync(_matchService.MatchId, (long)OpCode.PlayerReady, string.Empty);
+            JokerSelect select = new() {Selected = joker};
+            _socket.SendMatchStateAsync(_matchService.MatchId, (long)OpCode.PlayerSelect, select.ToByteArray());
         }
 
         public void Roll()
@@ -129,16 +131,5 @@ namespace Network
             _logger.Info("Player done.");
             _socket.SendMatchStateAsync(_matchService.MatchId, (long)OpCode.PlayerFail, string.Empty);
         }
-
-        // private IReadOnlyList<TileState> ConvertTileStates(IList<Api.TileState> tileStates)
-        // {
-        //     _tileStates.Clear();
-        //     foreach (var state in tileStates)
-        //     {
-        //         _tileStates.Add((TileState)state);
-        //     }
-        //
-        //     return _tileStates;
-        // }
     }
 }

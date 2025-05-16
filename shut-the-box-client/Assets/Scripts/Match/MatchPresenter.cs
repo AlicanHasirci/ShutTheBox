@@ -5,6 +5,7 @@ namespace Match
     using MessagePipe;
     using Network;
     using Player;
+    using Player.Jokers;
     using TileState = Player.TileState;
 
     public enum MatchEvent
@@ -35,8 +36,10 @@ namespace Match
         void StartMatchmaking();
         void CancelMatchmaking();
         void LeaveMatch();
+        void PlayerReady();
         ISubscriber<MatchEvent> OnMatchEvent { get; }
         ISubscriber<MatchResult> OnMatchResult { get; }
+        ISubscriber<JokerSelection> OnJokerSelection { get; }
     }
     
     public class MatchPresenter : IMatchPresenter, IDisposable
@@ -44,11 +47,13 @@ namespace Match
         public MatchModel Model { get; private set; }
         public ISubscriber<MatchEvent> OnMatchEvent { get; }
         public ISubscriber<MatchResult> OnMatchResult { get; }
-        
+        public ISubscriber<JokerSelection> OnJokerSelection { get; }
+
         private readonly INetworkService _networkService;
         private readonly IMatchService _matchService;
         private readonly IDisposablePublisher<MatchEvent> _eventPublisher;
         private readonly IDisposablePublisher<MatchResult> _resultPublisher;
+        private readonly IDisposablePublisher<JokerSelection> _jokerPublisher;
         private readonly IDisposable _disposable;
 
         public MatchPresenter(INetworkService networkService, IMatchService matchService, EventFactory eventFactory)
@@ -57,12 +62,14 @@ namespace Match
             _matchService = matchService;
             (_eventPublisher, OnMatchEvent) = eventFactory.CreateEvent<MatchEvent>();
             (_resultPublisher, OnMatchResult) = eventFactory.CreateEvent<MatchResult>();
+            (_jokerPublisher, OnJokerSelection) = eventFactory.CreateEvent<JokerSelection>();
             _disposable = DisposableBag.Create(
                 _matchService.OnMatchStart.Subscribe(OnMatchStart),
                 _matchService.OnRoundStart.Subscribe(OnRoundStart),
                 _matchService.OnMatchOver.Subscribe(OnMatchOver),
                 _eventPublisher,
-                _resultPublisher
+                _resultPublisher,
+                _jokerPublisher
             );
         }
 
@@ -98,6 +105,20 @@ namespace Match
         private void OnRoundStart(RoundStart roundStart)
         {
             Model.RoundId = roundStart.RoundId;
+            for (int i = 0; i < roundStart.Choices.Count; i++)
+            {
+                JokerChoice choice = roundStart.Choices[i];
+                if (choice.PlayerId.Equals(_networkService.PlayerId))
+                {
+                    Joker[] jokers = new Joker[choice.Jokers.Count];
+                    for (int j = 0; j < choice.Jokers.Count; j++)
+                    {
+                        jokers[j] = choice.Jokers[j];
+                    }
+                    _jokerPublisher.Publish(new JokerSelection { Jokers = jokers });
+                    break;
+                }
+            }
         }
 
         private void OnMatchOver(MatchOver matchOver)
@@ -147,6 +168,11 @@ namespace Match
         {
             _matchService.LeaveMatch();
             _eventPublisher.Publish(MatchEvent.Left);
+        }
+
+        public void PlayerReady()
+        {
+            _matchService.PlayerReady();
         }
     }
 }

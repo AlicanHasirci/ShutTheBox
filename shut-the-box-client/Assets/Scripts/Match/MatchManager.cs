@@ -9,6 +9,7 @@ namespace Match
 {
     using Cysharp.Threading.Tasks;
     using Network;
+    using Player.Jokers;
     using Popups;
     using VContainer;
     using Revel.UI.Popup;
@@ -21,6 +22,9 @@ namespace Match
         
         [SerializeField]
         private PlayerBehaviour[] _players;
+        
+        [SerializeField]
+        private PlayerUI[] _playersUIs;
         
         [SerializeField] 
         private TableInfoBehaviour _tableInfo;
@@ -49,6 +53,12 @@ namespace Match
                 lpp = i;
                 break;
             }
+            
+            for (int i = 0; i < _playersUIs.Length; i++)
+            {
+                int pIndex = (lpp + i) % PlayerPresenters.Count;
+                _playersUIs[i].Initialize(PlayerPresenters[pIndex]);
+            }
 
             for (int i = 0; i < _players.Length; i++)
             {
@@ -58,9 +68,15 @@ namespace Match
             }
 
             _disposable = DisposableBag.Create(
-                MatchService.OnRoundStart.Subscribe(OnRoundStart),
-                MatchPresenter.OnMatchResult.Subscribe(OnMatchResult)
+                MatchPresenter.OnMatchResult.Subscribe(OnMatchResult),
+                MatchPresenter.OnJokerSelection.Subscribe(OnJokerSelection)
             );
+            MatchPresenter.PlayerReady();
+        }
+
+        private void OnJokerSelection(JokerSelection obj)
+        {
+            _popupManager.Show<JokerSelectionUI, JokerSelection>(obj);
         }
 
         private void OnMatchResult(MatchResult result)
@@ -75,7 +91,13 @@ namespace Match
 
         private void OnRoundStart(RoundStart roundStart)
         {
-            _tableInfo.SetTableInfo($"Round {MatchPresenter.Model.RoundId + 1}\nStarting..", 5);
+            for (int i = 0; i < roundStart.Choices.Count; i++)
+            {
+                JokerChoice choice = roundStart.Choices[i];
+                // if (choice.PlayerId.Equals())
+            }
+
+            // roundStart.Choices
         }
 
         public void Exit()

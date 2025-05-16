@@ -79,6 +79,11 @@ namespace Network
             _ticket = null;
         }
 
+        public void PlayerReady()
+        {
+            _service.Socket.SendMatchStateAsync(MatchId, (long)OpCode.PlayerReady, string.Empty);
+        }
+
         public async void LeaveMatch()
         {
             _logger.Info($"Leaving match: {_ticket.Ticket}");

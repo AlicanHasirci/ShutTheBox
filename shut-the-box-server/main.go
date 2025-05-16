@@ -7,7 +7,12 @@ import (
 	_ "google.golang.org/protobuf/encoding/prototext"
 	"google.golang.org/protobuf/proto"
 	_ "google.golang.org/protobuf/proto"
+	"shut-the-box-server/match"
 	"time"
+)
+
+const (
+	moduleName = "shut-the-box"
 )
 
 var (
@@ -26,9 +31,9 @@ func InitModule(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runti
 	unmarshaler := &proto.UnmarshalOptions{}
 
 	if err := initializer.RegisterMatch(moduleName, func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule) (runtime.Match, error) {
-		return &MatchHandler{
-			marshaler:   marshaler,
-			unmarshaler: unmarshaler,
+		return &match.Handler{
+			Marshaler:   marshaler,
+			Unmarshaler: unmarshaler,
 		}, nil
 	}); err != nil {
 		return err

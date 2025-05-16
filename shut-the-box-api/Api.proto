@@ -10,11 +10,19 @@ enum OpCode {
   MATCH_OVER    = 2;
   ROUND_START   = 3;
   PLAYER_READY  = 4;
-  PLAYER_TURN   = 5;
-  PLAYER_ROLL   = 6;
-  PLAYER_MOVE   = 7;
-  PLAYER_CONF   = 8;
-  PLAYER_FAIL   = 9;
+  PLAYER_SELECT = 5;
+  PLAYER_TURN   = 6;
+  PLAYER_ROLL   = 7;
+  PLAYER_MOVE   = 8;
+  PLAYER_CONF   = 9;
+  PLAYER_FAIL   = 10;
+}
+
+enum Joker {
+  NONE          = 0;
+  DOUBLE_DICE   = 1;
+  ODD_TILE      = 2;
+  EVEN_TILE     = 3;
 }
 
 enum TileState {
@@ -50,6 +58,22 @@ message PlayerScore {
 
 message RoundStart {
   int32 roundId = 1;
+  repeated JokerChoice choices = 2;
+}
+
+message JokerChoice {
+  string playerId = 1;
+  repeated Joker jokers = 2;
+}
+
+message JokerSelect {
+  string playerId = 1;
+  Joker selected = 2;
+}
+
+message JokerScore {
+  Joker joker = 1;
+  int32 score = 2;
 }
 
 message PlayerTurn  {
@@ -70,8 +94,9 @@ message PlayerMove {
 message PlayerConfirm {
   string playerId = 1;
   repeated TileState tiles = 2;
-  bool boxShut = 3;
-  int32 score = 4;
+  repeated JokerScore jokers = 3;
+  bool boxShut = 4;
+  int32 score = 5;
 }
 
 message Player {
@@ -80,4 +105,5 @@ message Player {
   PlayerState State = 3;
   repeated int32 rolls = 4;
   repeated TileState tiles = 5;
+  repeated Joker jokers = 6;
 }

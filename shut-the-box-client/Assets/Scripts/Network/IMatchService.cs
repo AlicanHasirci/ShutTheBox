@@ -11,6 +11,7 @@ namespace Network
 
         void StartMatchmaking();
         void CancelMatchmaking();
+        void PlayerReady();
         void LeaveMatch();
     }
 }

@@ -1,0 +1,19 @@
+{
+    "name": "Player.Jokers.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:a730de7d022fc4b7fa64e62a944c42d6",
+        "GUID:1f9bbbf9f5cb04764b253f4075959dc3"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

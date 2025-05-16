@@ -1,36 +1,39 @@
-package main
+package match
 
 import (
 	"github.com/heroiclabs/nakama-common/runtime"
 	"math/rand"
 	"shut-the-box-server/api"
+	"shut-the-box-server/player"
 	"time"
 )
 
-type MatchStatus int
+type Status int
 
 const (
-	Waiting MatchStatus = iota
-	Starting
+	Starting Status = iota
+	Waiting
+	Choosing
 	Playing
 	Complete
 )
 
-type MatchState struct {
+type State struct {
 	presences       map[string]runtime.Presence
 	players         []*api.Player
-	matchState      MatchStatus
+	matchState      Status
 	random          *rand.Rand
 	roundId         int
+	playerReady     int
 	playerIndex     int
-	readyCount      int
+	waitingSelect   int
 	joinsInProgress int
 	emptyTicks      int
 	pauseTicks      int
 }
 
-func NewMatchState(playerCount int) *MatchState {
-	return &MatchState{
+func NewMatchState(playerCount int) *State {
+	return &State{
 		presences:   make(map[string]runtime.Presence, playerCount),
 		players:     make([]*api.Player, playerCount),
 		random:      rand.New(rand.NewSource(time.Now().UnixNano())),
@@ -40,7 +43,7 @@ func NewMatchState(playerCount int) *MatchState {
 	}
 }
 
-func (ms *MatchState) ConnectedCount() int {
+func (ms *State) ConnectedCount() int {
 	count := 0
 	for _, p := range ms.presences {
 		if p != nil {
@@ -50,7 +53,7 @@ func (ms *MatchState) ConnectedCount() int {
 	return count
 }
 
-func (ms *MatchState) NextPlayer() bool {
+func (ms *State) NextPlayer() bool {
 	idleIndex := -1
 	for i := 1; i < len(ms.players)+1; i++ {
 		index := (ms.playerIndex + i) % len(ms.players)
@@ -69,21 +72,17 @@ func (ms *MatchState) NextPlayer() bool {
 	}
 }
 
-func (ms *MatchState) GetPlayer(presence runtime.Presence) *Player {
+func (ms *State) GetPlayer(presence runtime.Presence) *player.Player {
 	if presence == nil {
-		return (*Player)(ms.players[ms.playerIndex])
+		return (*player.Player)(ms.players[ms.playerIndex])
 	} else {
 		playerId := presence.GetUserId()
-		var player *api.Player = nil
+		var retVal *api.Player = nil
 		for _, p := range ms.players {
 			if p.PlayerId == playerId {
-				player = p
+				retVal = p
 			}
 		}
-		return (*Player)(player)
+		return (*player.Player)(retVal)
 	}
-}
-
-func (ms *MatchState) GetRoll() int32 {
-	return ms.random.Int31n(5) + 1
 }

@@ -11,11 +11,13 @@ using ILogger = Revel.Diagnostics.ILogger;
 namespace App
 {
     using Match;
+    using Player.Jokers;
 
     public class AppScope : LifetimeScope
     {
         public NetworkSettings networkSettings;
         public DebugServices debugServices;
+        public JokerDatabase jokerDatabase;
         protected override void Configure(IContainerBuilder builder)
         {
             builder.RegisterMessagePipe();
@@ -29,6 +31,7 @@ namespace App
             builder.Register<ILogger, DebugLogger>(Lifetime.Singleton);
             builder.Register<ISceneController, SceneController>(Lifetime.Singleton);
             builder.Register<IMatchPresenter, MatchPresenter>(Lifetime.Singleton);
+            builder.RegisterInstance<IJokerDatabase>(jokerDatabase);
             
             if (debugServices.enabled)
             {

@@ -1,15 +1,15 @@
-using System;
-using MessagePipe;
-using R3;
 
 namespace Player
 {
+    using System;
+    using MessagePipe;
+    using R3;
     using Network;
 
     public interface ILocalPlayerPresenter : IPlayerPresenter
     {
         ReactiveProperty<bool> CanConfirm { get; }
-        public void Ready();
+        public void Select(Joker joker);
         public void Confirm();
         public void Roll();
         public void Done();
@@ -18,6 +18,7 @@ namespace Player
     public class LocalPlayerPresenter : PlayerPresenter, ILocalPlayerPresenter
     {
         public ReactiveProperty<bool> CanConfirm { get; }
+        
         private PlayerState _state;
 
         public LocalPlayerPresenter(
@@ -31,9 +32,9 @@ namespace Player
             CanConfirm = new ReactiveProperty<bool>(false);
         }
 
-        public void Ready()
+        public void Select(Joker joker)
         {
-            Service.Ready();
+            Service.Select(joker);
         }
 
         public void Roll()
@@ -90,7 +91,7 @@ namespace Player
             SetState(PlayerState.Roll);
         }
 
-        protected override async void OnPlayerRoll(PlayerRoll playerRoll)
+        protected override void OnPlayerRoll(PlayerRoll playerRoll)
         {
             if (!IsCurrentPlayer(playerRoll.PlayerId))
             {
