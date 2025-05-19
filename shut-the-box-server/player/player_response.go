@@ -9,7 +9,7 @@ import (
 func (p *Player) ConfirmResponse() *api.PlayerConfirm {
 	appliedJokers := make([]*api.JokerScore, len(p.Jokers))
 	if p.CanConfirm() {
-		score := int32(0)
+		totalScore := int32(0)
 		for _, j := range p.Jokers {
 			joker := jokers.JokerMap[j]
 			if jScore := joker.TryApply(p.Rolls, p.Tiles); jScore > 0 {
@@ -17,16 +17,16 @@ func (p *Player) ConfirmResponse() *api.PlayerConfirm {
 					Joker: j,
 					Score: jScore,
 				})
-				score += jScore
+				totalScore += jScore
 			}
 		}
-		score += p.Confirm()
-		p.Score += score
+		totalScore += p.Confirm()
+		p.Score += totalScore
 		return &api.PlayerConfirm{
 			PlayerId: p.PlayerId,
 			Tiles:    p.Tiles,
 			BoxShut:  p.BoxShut(),
-			Score:    score,
+			Score:    totalScore,
 			Jokers:   appliedJokers,
 		}
 	} else {

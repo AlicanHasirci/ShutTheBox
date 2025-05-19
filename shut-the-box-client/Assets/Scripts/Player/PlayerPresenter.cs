@@ -33,13 +33,13 @@ namespace Player
         public ISubscriber<int> OnScore { get; }
 
         protected readonly IPlayerService Service;
-        protected readonly IDisposablePublisher<PlayerState> StatePublisher;
         protected readonly IDisposablePublisher<TileState[]> BoxPublisher;
-        protected readonly IDisposableAsyncPublisher<(int[], bool)> RollPublisher;
-        protected readonly IDisposablePublisher<(Joker, int)> JokerActivatePublisher;
-        protected readonly IDisposablePublisher<JokerSelection> JokerSelectionPublisher;
-        protected readonly IDisposablePublisher<Joker> JokerSelectPublisher;
-        protected readonly IDisposablePublisher<int> ScorePublisher;
+        private readonly IDisposablePublisher<PlayerState> _statePublisher;
+        private readonly IDisposableAsyncPublisher<(int[], bool)> _rollPublisher;
+        private readonly IDisposablePublisher<(Joker, int)> _jokerActivatePublisher;
+        private readonly IDisposablePublisher<JokerSelection> _jokerSelectionPublisher;
+        private readonly IDisposablePublisher<Joker> _jokerSelectPublisher;
+        private readonly IDisposablePublisher<int> _scorePublisher;
 
         private readonly IDisposable _disposable;
 
@@ -50,23 +50,23 @@ namespace Player
             EventFactory eventFactory
         )
         {
-            (StatePublisher, OnState) = eventFactory.CreateEvent<PlayerState>();
             (BoxPublisher, OnBox) = eventFactory.CreateEvent<TileState[]>();
-            (RollPublisher, OnRoll) = eventFactory.CreateAsyncEvent< (int[], bool)>();
-            (JokerActivatePublisher, OnJokerActivate) = eventFactory.CreateEvent<(Joker, int)>();
-            (JokerSelectionPublisher, OnJokerSelection) = eventFactory.CreateEvent<JokerSelection>();
-            (JokerSelectPublisher, OnJokerSelect) = eventFactory.CreateEvent<Joker>();
-            (ScorePublisher, OnScore) = eventFactory.CreateEvent<int>();
+            (_statePublisher, OnState) = eventFactory.CreateEvent<PlayerState>();
+            (_rollPublisher, OnRoll) = eventFactory.CreateAsyncEvent< (int[], bool)>();
+            (_jokerActivatePublisher, OnJokerActivate) = eventFactory.CreateEvent<(Joker, int)>();
+            (_jokerSelectionPublisher, OnJokerSelection) = eventFactory.CreateEvent<JokerSelection>();
+            (_jokerSelectPublisher, OnJokerSelect) = eventFactory.CreateEvent<Joker>();
+            (_scorePublisher, OnScore) = eventFactory.CreateEvent<int>();
 
             Model = model;
             Service = playerService;
             _disposable = DisposableBag.Create(
-                StatePublisher,
+                _statePublisher,
                 BoxPublisher,
-                RollPublisher,
-                JokerActivatePublisher,
-                JokerSelectPublisher,
-                ScorePublisher,
+                _rollPublisher,
+                _jokerActivatePublisher,
+                _jokerSelectPublisher,
+                _scorePublisher,
                 matchService.OnRoundStart.Subscribe(OnRoundStart),
                 playerService.OnJoker.Subscribe(OnPlayerJoker),
                 playerService.OnTurn.Subscribe(OnPlayerTurn),
@@ -78,12 +78,12 @@ namespace Player
 
         public void Initialize()
         {
-            StatePublisher.Publish(Model.State);
+            _statePublisher.Publish(Model.State);
             BoxPublisher.Publish(Model.Tiles);
-            ScorePublisher.Publish(Model.Score);
+            _scorePublisher.Publish(Model.Score);
             if (Model.State is PlayerState.Play)
             {
-                RollPublisher.Publish((Model.Rolls, true));
+                _rollPublisher.Publish((Model.Rolls, true));
             }
         }
 
@@ -112,7 +112,7 @@ namespace Player
         private void OnRoundStart(RoundStart roundStart)
         {
             Reset();
-            StatePublisher.Publish(Model.State);
+            _statePublisher.Publish(Model.State);
             BoxPublisher.Publish(Model.Tiles);
             for (int i = 0; i < roundStart.Choices.Count; i++)
             {
@@ -124,7 +124,7 @@ namespace Player
                     {
                         jokers[j] = choice.Jokers[j];
                     }
-                    JokerSelectionPublisher.Publish(new JokerSelection { Jokers = jokers });
+                    _jokerSelectionPublisher.Publish(new JokerSelection { Jokers = jokers });
                     break;
                 }
             }
@@ -136,19 +136,19 @@ namespace Player
             {
                 return;
             }
-            JokerSelectPublisher.Publish(jokerSelect.Selected);
+            _jokerSelectPublisher.Publish(jokerSelect.Selected);
         }
 
-        protected virtual void OnPlayerTurn(PlayerTurn playerTurn)
+        private void OnPlayerTurn(PlayerTurn playerTurn)
         {
             if (!IsCurrentPlayer(playerTurn.PlayerId))
             {
                 return;
             }
-            StatePublisher.Publish(PlayerState.Roll);
+            SetState(PlayerState.Roll);
         }
 
-        protected virtual async void OnPlayerRoll(PlayerRoll playerRoll)
+        private async void OnPlayerRoll(PlayerRoll playerRoll)
         {
             if (!IsCurrentPlayer(playerRoll.PlayerId))
             {
@@ -160,10 +160,11 @@ namespace Player
                 Model.Rolls[i] = playerRoll.Rolls[i];
             }
             
-            await RollPublisher.PublishAsync((Model.Rolls, false));
+            await _rollPublisher.PublishAsync((Model.Rolls, false));
+            SetState(HasMoves() ? PlayerState.Play : PlayerState.Fail);
         }
 
-        protected virtual void OnPlayerMove(PlayerMove playerMove)
+        private void OnPlayerMove(PlayerMove playerMove)
         {
             if (!IsCurrentPlayer(playerMove.PlayerId))
             {
@@ -173,7 +174,7 @@ namespace Player
             BoxPublisher.Publish(Model.Tiles);
         }
 
-        protected virtual void OnPlayerConfirm(PlayerConfirm playerConfirm)
+        private void OnPlayerConfirm(PlayerConfirm playerConfirm)
         {
             if (!IsCurrentPlayer(playerConfirm.PlayerId))
             {
@@ -188,19 +189,44 @@ namespace Player
             for (int i = 0; i < playerConfirm.Jokers.Count; i++)
             {
                 JokerScore jokerScore = playerConfirm.Jokers[i];
-                JokerActivatePublisher.Publish((jokerScore.Joker, jokerScore.Score));
+                _jokerActivatePublisher.Publish((jokerScore.Joker, jokerScore.Score));
             }
 
-            Model.State = PlayerState.Idle;
             Model.Score += playerConfirm.Score;
             BoxPublisher.Publish(Model.Tiles);
-            StatePublisher.Publish(Model.State);
-            ScorePublisher.Publish(Model.Score);
+            _scorePublisher.Publish(Model.Score);
+            SetState(PlayerState.Idle);
         }
 
-        protected bool IsCurrentPlayer(string playerId)
+        private bool IsCurrentPlayer(string playerId)
         {
             return string.Equals(playerId, Model.PlayerId);
+        }
+        
+        private bool HasMoves() {
+            return CanMakeSum(Model.TotalRoll);
+        }
+         
+        private bool CanMakeSum(int target, int index = 0) {
+            if (target == 0)
+            {
+                return true;
+            }
+            if (index >= Model.Tiles.Length || target < 0)
+            {
+                return false;
+            }
+            int next = index + 1;
+            int value = index + 1;
+            return (Model.Tiles[index] is TileState.Open && CanMakeSum(target - value, next)) || CanMakeSum(target, next);
+        }
+
+        protected void SetState(PlayerState state)
+        {
+            if (Model.State == state)
+                return;
+            Model.State = state;
+            _statePublisher.Publish(Model.State);
         }
     }
 }

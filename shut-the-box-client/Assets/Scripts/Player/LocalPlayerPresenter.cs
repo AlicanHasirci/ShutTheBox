@@ -18,8 +18,6 @@ namespace Player
     public class LocalPlayerPresenter : PlayerPresenter, ILocalPlayerPresenter
     {
         public ReactiveProperty<bool> CanConfirm { get; }
-        
-        private PlayerState _state;
 
         public LocalPlayerPresenter(
             PlayerModel model,
@@ -39,16 +37,15 @@ namespace Player
 
         public void Roll()
         {
-            if (_state is PlayerState.Idle)
+            if (Model.State is PlayerState.Idle)
                 return;
             SetState(PlayerState.Idle);
-            StatePublisher.Publish(_state);
             Service.Roll();
         }
 
         public override void TileToggle(int index)
         {
-            if (_state is not PlayerState.Play)
+            if (Model.State is not PlayerState.Play)
                 return;
             if (!Toggle(index))
                 return;
@@ -59,11 +56,10 @@ namespace Player
 
         public void Confirm()
         {
-            if (_state is not PlayerState.Play)
+            if (Model.State is not PlayerState.Play)
             {
                 return;
             }
-            SetState(PlayerState.Idle);
             Service.Confirm();
             for (int i = 0; i < Model.Tiles.Length; i++)
             {
@@ -75,30 +71,12 @@ namespace Player
             }
             BoxPublisher.Publish(Model.Tiles);
             CanConfirm.Value = false;
+            SetState(PlayerState.Idle);
         }
 
         public void Done()
         {
             Service.Done();
-        }
-
-        protected override void OnPlayerTurn(PlayerTurn playerTurn)
-        {
-            if (!IsCurrentPlayer(playerTurn.PlayerId))
-            {
-                return;
-            }
-            SetState(PlayerState.Roll);
-        }
-
-        protected override void OnPlayerRoll(PlayerRoll playerRoll)
-        {
-            if (!IsCurrentPlayer(playerRoll.PlayerId))
-            {
-                return;
-            }
-            base.OnPlayerRoll(playerRoll);
-            SetState(HasMoves() ? PlayerState.Play : PlayerState.Fail);
         }
 
         private bool Toggle(int index)
@@ -131,32 +109,6 @@ namespace Player
                 sum += i + 1;
             }
             return Model.TotalRoll == sum;
-        }
-
-        private bool HasMoves() {
-            return CanMakeSum(Model.TotalRoll);
-        }
-         
-        private bool CanMakeSum(int target, int index = 0) {
-            if (target == 0)
-            {
-                return true;
-            }
-            if (index >= Model.Tiles.Length || target < 0)
-            {
-                return false;
-            }
-            int next = index + 1;
-            int value = index + 1;
-            return (Model.Tiles[index] is TileState.Open && CanMakeSum(target - value, next)) || CanMakeSum(target, next);
-        }
-
-        private void SetState(PlayerState state)
-        {
-            if (_state == state)
-                return;
-            _state = state;
-            StatePublisher.Publish(_state);
         }
     }
 }

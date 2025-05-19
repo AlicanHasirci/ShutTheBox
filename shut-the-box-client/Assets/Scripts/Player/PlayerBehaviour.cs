@@ -17,7 +17,7 @@ namespace Player
 
         [SerializeField]
         private DiceManager _diceManager;
-
+        
         private IPlayerPresenter _presenter;
         private IDisposable _disposable;
 
