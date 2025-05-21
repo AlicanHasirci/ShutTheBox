@@ -5,6 +5,7 @@ namespace Player
     using System;
     using Jokers;
     using MessagePipe;
+    using UnityEngine;
     using DisposableBag = MessagePipe.DisposableBag;
 
     public interface IPlayerPresenter
@@ -189,6 +190,11 @@ namespace Player
             for (int i = 0; i < playerConfirm.Jokers.Count; i++)
             {
                 JokerScore jokerScore = playerConfirm.Jokers[i];
+                if (jokerScore.Joker == Joker.None)
+                {
+                    continue;
+                }
+                Debug.Log($"Joker score: {jokerScore.Score}");
                 _jokerActivatePublisher.Publish((jokerScore.Joker, jokerScore.Score));
             }
 

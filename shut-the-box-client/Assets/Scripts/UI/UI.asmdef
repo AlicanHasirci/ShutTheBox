@@ -1,17 +1,12 @@
 {
-    "name": "Player",
+    "name": "UI",
     "rootNamespace": "",
     "references": [
-        "UniTask",
-        "MessagePipe",
-        "VContainer",
-        "Revel.UI",
-        "DOTween.Modules",
-        "Revel.Diagnostics",
-        "Network",
-        "Unity.TextMeshPro",
-        "UI",
-        "Utility"
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "GUID:9efe5861db85a4e12a3af890b296a209",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:372de0ca8973b4c988fb27ed6097ceed",
+        "GUID:0b97c54c27da2457e867ddccaec51aca"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
