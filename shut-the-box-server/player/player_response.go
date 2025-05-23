@@ -21,6 +21,9 @@ func (p *Player) ConfirmResponse() *api.PlayerConfirm {
 			}
 		}
 		totalScore += p.Confirm()
+		if p.BoxShut() {
+			totalScore += 50
+		}
 		p.Score += totalScore
 		return &api.PlayerConfirm{
 			PlayerId: p.PlayerId,

@@ -1,105 +1,161 @@
-// using JetBrains.Annotations;
-// using R3;
-// using Sirenix.OdinInspector.Editor;
-//
-// namespace Debug
-// {
-//     using UnityEngine;
-//     using System.Collections.Generic;
-//     using MessagePipe;
-//     using Network;
-//     using Sirenix.OdinInspector;
-//     using VContainer;
-//     using PlayerState = Player.PlayerState;
-//     using TileState = Player.TileState;
-//
-//     public partial class DebugServices : IPlayerService
-//     {
-//         public ISubscriber<int> OnRoundStart { get; private set; }
-//         public ISubscriber<string> OnTurn { get; private set; }
-//         public ISubscriber<(string, int)> OnRoll { get; private set; }
-//         public ISubscriber<(string, int, TileState)> OnMove { get; private set; }
-//         public ISubscriber<(string, IReadOnlyList<TileState>)> OnConfirm { get; private set; }
-//         
-//         private IDisposablePublisher<string> _onTurn;
-//         private IDisposablePublisher<(string, int)> _onRoll;
-//         private IDisposablePublisher<(string, int, TileState)> _onMove;
-//         private IDisposablePublisher<(string, IReadOnlyList<TileState>)> _onConfirm;
-//
-//         [BoxGroup("Player", VisibleIf = "@serviceType == ServiceType.Player && enabled"), ShowInInspector]
-//         private string _psId;
-//         [BoxGroup("Player"), ShowInInspector]
-//         private PlayerState _psState;
-//         [BoxGroup("Player"), ShowInInspector]
-//         private int _psRoll;
-//         [BoxGroup("Player"), ShowInInspector, OnCollectionChanged(After = "TileChanged")]
-//         private TileState[] _psTiles = new TileState[9];
-//         
-//
-//         [Inject]
-//         public void PlayerServices(EventFactory eventFactory)
-//         {
-//             (_onTurn, OnTurn) = eventFactory.CreateEvent<string>();
-//             (_onRoll, OnRoll) = eventFactory.CreateEvent<(string, int)>();
-//             (_onMove, OnMove) = eventFactory.CreateEvent<(string, int, TileState)>();
-//             (_onConfirm, OnConfirm) = eventFactory.CreateEvent<(string, IReadOnlyList<TileState>)>();
-//             
-//             _disposable = Disposable.Combine(_disposable, _onTurn);
-//             _disposable = Disposable.Combine(_disposable, _onRoll);
-//             _disposable = Disposable.Combine(_disposable, _onMove);
-//             _disposable = Disposable.Combine(_disposable, _onConfirm);
-//         }
-//         
-//         [Button(ButtonStyle.FoldoutButton, Name = "Turn")]
-//         [BoxGroup("Player"), HorizontalGroup("Player/Buttons")]
-//         private void PublishTurn()
-//         {
-//             _onTurn?.Publish(_psId);
-//         }
-//         
-//         [Button(ButtonStyle.FoldoutButton, Name = "Roll")]
-//         [BoxGroup("Player"), HorizontalGroup("Player/Buttons")]
-//         private void PublishRoll()
-//         {
-//             _onRoll?.Publish((_psId, _psRoll));
-//         }
-//
-//         [Button(ButtonStyle.FoldoutButton, Name = "Confirm")]
-//         [BoxGroup("Player"), HorizontalGroup("Player/Buttons")]
-//         private void PlayerConfirm()
-//         {
-//             _onConfirm?.Publish((_psId, _psTiles));
-//         }
-//
-//         [UsedImplicitly]
-//         public void TileChanged(CollectionChangeInfo info)
-//         {
-//             _onMove?.Publish((_psId, info.Index, _psTiles[info.Index]));
-//         }
-//         
-//         public void Ready()
-//         {
-//             Debug.Log("DebugServices.PlayerService.PlayerReady");
-//         }
-//
-//         public void Roll()
-//         {
-//             Debug.Log("DebugServices.PlayerService.PlayerRoll");
-//         }
-//
-//         public void Toggle(int index)
-//         {
-//             Debug.Log("DebugServices.PlayerService.PlayerToggle");
-//         }
-//
-//         public void Confirm()
-//         {
-//             Debug.Log("DebugServices.PlayerService.PlayerConfirm");
-//         }
-//
-//         public void Done()
-//         {
-//             Debug.Log("DebugServices.PlayerService.Done");
-//         }
-//     }
-// }
+namespace Debug
+{
+    using System;
+    using Match;
+    using MessagePipe;
+    using Network;
+    using Player;
+    using Sirenix.OdinInspector;
+    using UnityEngine;
+    using VContainer;
+    using TileState = Network.TileState;
+
+    public partial class DebugServices
+    {
+        public DebugPlayerService PlayerService;
+        
+        [Serializable]
+        [HideLabel, BoxGroup("Player", VisibleIf = "@serviceType == ServiceType.Player && enabled")]
+        public class DebugPlayerService : IPlayerService, IDisposable
+        {
+            public ISubscriber<JokerSelect> OnJoker { get; set; }
+            public ISubscriber<PlayerTurn> OnTurn { get; set; }
+            public ISubscriber<PlayerRoll> OnRoll { get; set; }
+            public ISubscriber<PlayerMove> OnMove { get; set; }
+            public ISubscriber<PlayerConfirm> OnConfirm { get; set; }
+            
+            private IDisposablePublisher<JokerSelect> SelectPublisher { get; set; }
+            private IDisposablePublisher<PlayerTurn> TurnPublisher { get; set; }
+            private IDisposablePublisher<PlayerRoll> RollPublisher { get; set; }
+            private IDisposablePublisher<PlayerMove> MovePublisher { get; set; }
+            private IDisposablePublisher<PlayerConfirm> ConfirmPublisher { get; set; }
+            
+            private IDisposable _subscription;
+
+            public string PlayerId;
+            private IMatchPresenter _matchPresenter;
+
+            [Inject]
+            private void Inject(EventFactory eventFactory, IMatchPresenter matchPresenter)
+            {
+                _matchPresenter = matchPresenter;
+                (SelectPublisher,OnJoker) = eventFactory.CreateEvent<JokerSelect>();
+                (TurnPublisher,OnTurn) = eventFactory.CreateEvent<PlayerTurn>();
+                (RollPublisher,OnRoll) = eventFactory.CreateEvent<PlayerRoll>();
+                (MovePublisher,OnMove) = eventFactory.CreateEvent<PlayerMove>();
+                (ConfirmPublisher,OnConfirm) = eventFactory.CreateEvent<PlayerConfirm>();
+
+                _subscription = DisposableBag.Create(
+                    SelectPublisher,
+                    TurnPublisher,
+                    RollPublisher,
+                    MovePublisher,
+                    ConfirmPublisher
+                );
+            }
+            
+            [Button("Joker", ButtonStyle.FoldoutButton)]
+            public void JokerSelectDebug(Joker joker)
+            {
+                JokerSelect js = new()
+                {
+                    PlayerId = PlayerId,
+                    Selected = joker
+                };
+                SelectPublisher.Publish(js);
+            }
+
+            [Button("Turn", ButtonStyle.FoldoutButton)]
+            public void TurnDebug()
+            {
+                TurnPublisher.Publish(new PlayerTurn
+                {
+                    PlayerId = PlayerId
+                });
+            }
+
+            [Button("Roll", ButtonStyle.FoldoutButton)]
+            public void RollDebug(int[] rolls)
+            {
+                PlayerRoll pr = new()
+                {
+                    PlayerId = PlayerId
+                };
+                pr.Rolls.AddRange(rolls);
+                RollPublisher.Publish(pr);
+            }
+
+            [Button("Move", ButtonStyle.FoldoutButton)]
+            public void MoveDebug(int i, TileState tile)
+            {
+                MovePublisher.Publish(new PlayerMove
+                {
+                    PlayerId = PlayerId,
+                    Index = i,
+                    State = tile
+                });
+            }
+
+            [Button("Confirm", ButtonStyle.FoldoutButton)]
+            public void ConfirmDebug(int score, bool boxShut)
+            {
+                PlayerConfirm pc = new()
+                {
+                    PlayerId = PlayerId,
+                    Score = score,
+                    BoxShut = boxShut
+                };
+                foreach (PlayerModel playerModel in _matchPresenter.Model.Players)
+                {
+                    if (PlayerId == playerModel.PlayerId)
+                    {
+                        foreach (TileState tile in playerModel.Tiles)
+                        {
+                            pc.Tiles.Add(tile);
+                        }
+
+                        foreach (Joker joker in playerModel.Jokers)
+                        {
+                            pc.Jokers.Add(new JokerScore
+                            {
+                                Joker = joker,
+                                Score = 5
+                            });
+                        }
+                    }
+                }
+                ConfirmPublisher.Publish(pc);
+            }
+            
+            public void Roll()
+            {
+                Debug.Log("Roll");
+            }
+
+            public void Select(Joker joker)
+            {
+                Debug.Log($"Select {joker}");
+            }
+
+            public void Toggle(int index)
+            {
+                Debug.Log($"Toggle {index}");
+            }
+
+            public void Confirm()
+            {
+                Debug.Log("Confirm");
+            }
+
+            public void Done()
+            {
+                Debug.Log("Done");
+            }
+
+            public void Dispose()
+            {
+                _subscription?.Dispose();
+            }
+        }
+    }
+}

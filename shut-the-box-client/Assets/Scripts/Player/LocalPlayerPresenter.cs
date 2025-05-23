@@ -37,8 +37,6 @@ namespace Player
 
         public void Roll()
         {
-            if (Model.State is PlayerState.Idle)
-                return;
             SetState(PlayerState.Idle);
             Service.Roll();
         }

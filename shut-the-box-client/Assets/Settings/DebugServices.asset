@@ -12,5 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3118680e30f490d86ac09c49cbbeee6, type: 3}
   m_Name: DebugServices
   m_EditorClassIdentifier: 
-  enabled: 0
-  serviceType: 1
+  enabled: 1
+  serviceType: 2
+  MatchService:
+    MatchModel:
+      Players:
+      - PlayerId: 0
+        State: 0
+        Tiles: 000000000000000000000000000000000000000000000000000000000000000000000000
+        Jokers: 
+        Rolls: 0000000000000000
+        Score: 0
+      - PlayerId: 1
+        State: 0
+        Tiles: 000000000000000000000000000000000000000000000000000000000000000000000000
+        Jokers: 
+        Rolls: 0000000000000000
+        Score: 0
+      MatchId: 
+      TurnTime: 0
+      TileCount: 9
+      RoundId: 0
+  NetworkService:
+    _playerId: 0
+  PlayerService:
+    PlayerId: 0

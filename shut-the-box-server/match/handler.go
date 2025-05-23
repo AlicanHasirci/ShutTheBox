@@ -12,7 +12,7 @@ const (
 	chooseTime  = 30
 	tickRate    = 5
 	playerCount = 2
-	roundCount  = 2
+	roundCount  = 3
 	tileCount   = 9
 	diceCount   = 2
 	turnTime    = 0

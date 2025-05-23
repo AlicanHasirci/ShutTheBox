@@ -46,7 +46,7 @@ func (p *Player) Toggle(index int) api.TileState {
 
 func (p *Player) RollDice(rand *rand.Rand) {
 	for i := range p.Rolls {
-		p.Rolls[i] = rand.Int31n(5) + 1
+		p.Rolls[i] = rand.Int31n(6) + 1
 	}
 
 	if p.HasMoves() {

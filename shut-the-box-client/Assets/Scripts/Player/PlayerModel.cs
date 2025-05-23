@@ -3,7 +3,7 @@ using Sirenix.OdinInspector;
 
 namespace Player
 {
-    using UnityEngine.Serialization;
+    using Network;
 
     [EnumToggleButtons]
     public enum TileState
@@ -27,6 +27,7 @@ namespace Player
         public string PlayerId;
         public PlayerState State;
         public TileState[] Tiles;
+        public Joker[] Jokers;
         public int[] Rolls;
         public int Score;
 
@@ -44,11 +45,12 @@ namespace Player
             }
         }
 
-        public PlayerModel(string playerId, int tileCount, int diceCount)
+        public PlayerModel(string playerId, int tileCount, int diceCount, int roundCount)
         {
             PlayerId = playerId;
             State = PlayerState.Idle;
             Tiles = new TileState[tileCount];
+            Jokers = new Joker[roundCount];
             Rolls = new int[diceCount];
 
             for (var i = 0; i < tileCount; i++)

@@ -35,8 +35,12 @@ namespace App
             
             if (debugServices.enabled)
             {
-                builder.RegisterInstance(debugServices).AsImplementedInterfaces();
-                builder.RegisterBuildCallback(resolver => resolver.Inject(debugServices));
+                builder.RegisterInstance(debugServices.NetworkService).AsImplementedInterfaces();
+                builder.RegisterBuildCallback(resolver => resolver.Inject(debugServices.NetworkService));
+                builder.RegisterInstance(debugServices.MatchService).AsImplementedInterfaces();
+                builder.RegisterBuildCallback(resolver => resolver.Inject(debugServices.MatchService));
+                builder.RegisterInstance(debugServices.PlayerService).AsImplementedInterfaces();
+                builder.RegisterBuildCallback(resolver => resolver.Inject(debugServices.PlayerService));
             }
             else
             {
