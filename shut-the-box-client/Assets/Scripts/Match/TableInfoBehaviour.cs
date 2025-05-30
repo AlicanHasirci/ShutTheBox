@@ -4,14 +4,14 @@ namespace Match
     using DG.Tweening;
     using TMPro;
     using UnityEngine;
-    
+
     public class TableInfoBehaviour : MonoBehaviour
     {
-        [SerializeField] 
+        [SerializeField]
         private TMP_Text _tableText;
-        
+
         private IDisposable _disposable;
-        
+
         private void Awake()
         {
             _tableText.color = new Color(1, 1, 1, 0);
@@ -20,7 +20,7 @@ namespace Match
         private void OnDestroy()
         {
             DOTween.Kill(this);
-            
+
             _disposable?.Dispose();
         }
 

@@ -10,11 +10,13 @@ namespace Debug
     {
         public enum ServiceType
         {
-            Network, Match, Player
+            Network,
+            Match,
+            Player,
         }
-        
+
         public bool enabled;
-        
+
         [UsedImplicitly]
         [EnumToggleButtons]
         [ShowIf("@enabled")]

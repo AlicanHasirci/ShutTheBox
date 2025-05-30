@@ -25,7 +25,6 @@ namespace App
             {
                 await _sceneController.LoadSceneAsync("MenuScene");
             }
-
         }
     }
 }

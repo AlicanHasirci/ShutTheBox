@@ -8,7 +8,7 @@ namespace Network
     using R3;
     using DisposableBag = MessagePipe.DisposableBag;
     using ILogger = Revel.Diagnostics.ILogger;
-    
+
     public class NetworkPlayerService : IPlayerService, IDisposable
     {
         public ISubscriber<JokerSelect> OnJoker { get; }
@@ -104,32 +104,52 @@ namespace Network
 
         public void Select(Joker joker)
         {
-            JokerSelect select = new() {Selected = joker};
-            _socket.SendMatchStateAsync(_matchService.MatchId, (long)OpCode.PlayerSelect, select.ToByteArray());
+            JokerSelect select = new() { Selected = joker };
+            _socket.SendMatchStateAsync(
+                _matchService.MatchId,
+                (long)OpCode.PlayerSelect,
+                select.ToByteArray()
+            );
         }
 
         public void Roll()
         {
-            _socket.SendMatchStateAsync(_matchService.MatchId, (long)OpCode.PlayerRoll, string.Empty);
+            _socket.SendMatchStateAsync(
+                _matchService.MatchId,
+                (long)OpCode.PlayerRoll,
+                string.Empty
+            );
         }
 
         public void Toggle(int index)
         {
             _logger.Info($"Player toggled {index}.");
             PlayerMove move = new() { PlayerId = _playerId, Index = index };
-            _socket.SendMatchStateAsync(_matchService.MatchId, (long)OpCode.PlayerMove, move.ToByteArray());
+            _socket.SendMatchStateAsync(
+                _matchService.MatchId,
+                (long)OpCode.PlayerMove,
+                move.ToByteArray()
+            );
         }
 
         public void Confirm()
         {
             _logger.Info("Player confirmed.");
-            _socket.SendMatchStateAsync(_matchService.MatchId, (long)OpCode.PlayerConf, string.Empty);
+            _socket.SendMatchStateAsync(
+                _matchService.MatchId,
+                (long)OpCode.PlayerConf,
+                string.Empty
+            );
         }
 
         public void Done()
         {
             _logger.Info("Player done.");
-            _socket.SendMatchStateAsync(_matchService.MatchId, (long)OpCode.PlayerFail, string.Empty);
+            _socket.SendMatchStateAsync(
+                _matchService.MatchId,
+                (long)OpCode.PlayerFail,
+                string.Empty
+            );
         }
     }
 }

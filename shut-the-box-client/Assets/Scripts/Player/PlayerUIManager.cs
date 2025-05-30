@@ -2,8 +2,8 @@ namespace Player
 {
     using System;
     using DG.Tweening;
-    using MessagePipe;
     using Dice;
+    using MessagePipe;
     using Network;
     using R3;
     using Revel.UI;
@@ -18,7 +18,7 @@ namespace Player
 
         [SerializeField]
         private RectTransform _turnPanel;
-        
+
         [SerializeField]
         private RectTransform _failPanel;
 
@@ -61,7 +61,7 @@ namespace Player
             if (state == _playerState)
                 return;
             _playerState = state;
-            
+
             SetPanelVisibility(_rollPanel, state is PlayerState.Roll);
             SetPanelVisibility(_turnPanel, state is PlayerState.Play);
             SetPanelVisibility(_failPanel, state is PlayerState.Fail);
@@ -99,14 +99,18 @@ namespace Player
                 DOTween.Kill(panel);
                 panel.gameObject.SetActive(true);
                 panel.DOAnchorPosY(panel.sizeDelta.y, .5f).SetEase(Ease.OutBack).SetId(panel);
-            } else
+            }
+            else
             {
                 if (!panel.gameObject.activeSelf)
                 {
                     return;
                 }
                 DOTween.Kill(panel);
-                panel.DOAnchorPosY(0, .5f).SetEase(Ease.OutBack).SetId(panel)
+                panel
+                    .DOAnchorPosY(0, .5f)
+                    .SetEase(Ease.OutBack)
+                    .SetId(panel)
                     .OnKill(() => panel.gameObject.SetActive(false))
                     .OnComplete(() => panel.gameObject.SetActive(false));
             }

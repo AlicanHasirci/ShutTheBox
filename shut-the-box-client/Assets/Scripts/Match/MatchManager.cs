@@ -11,27 +11,27 @@ namespace Match
     using Network;
     using Player.Jokers;
     using Popups;
-    using VContainer;
     using Revel.UI.Popup;
     using Utility;
+    using VContainer;
 
     public class MatchManager : MonoBehaviour
     {
-        [SerializeField] 
+        [SerializeField]
         private PopupManager _popupManager;
-        
+
         [SerializeField]
         private PlayerBehaviour[] _players;
-        
+
         [SerializeField]
         private PlayerUI[] _playersUIs;
-        
-        [SerializeField] 
+
+        [SerializeField]
         private TableInfoBehaviour _tableInfo;
 
-        [Inject] 
+        [Inject]
         public IMatchPresenter MatchPresenter;
-        
+
         [Inject]
         public IReadOnlyList<IPlayerPresenter> PlayerPresenters;
 
@@ -42,7 +42,7 @@ namespace Match
         public IMatchService MatchService;
 
         private IDisposable _disposable;
-        
+
         private void Start()
         {
             int lpp = -1;
@@ -53,7 +53,7 @@ namespace Match
                 lpp = i;
                 break;
             }
-            
+
             for (int i = 0; i < _playersUIs.Length; i++)
             {
                 int pIndex = (lpp + i) % PlayerPresenters.Count;

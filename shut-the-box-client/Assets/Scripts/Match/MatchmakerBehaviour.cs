@@ -10,9 +10,9 @@ namespace Match
 
     public class MatchmakerBehaviour : MonoBehaviour
     {
-        [Inject] 
+        [Inject]
         public IPublisher<bool, InfoPopup.Payload> InfoPopupPublisher;
-        
+
         [Inject]
         public ISceneController SceneController;
 
@@ -23,9 +23,7 @@ namespace Match
 
         private void Awake()
         {
-            _disposable = DisposableBag.Create(
-                MatchPresenter.OnMatchEvent.Subscribe(OnMatchEvent)
-            );
+            _disposable = DisposableBag.Create(MatchPresenter.OnMatchEvent.Subscribe(OnMatchEvent));
         }
 
         private void OnDestroy()
@@ -38,7 +36,10 @@ namespace Match
             switch (matchEvent)
             {
                 case MatchEvent.Searching:
-                    InfoPopupPublisher.Publish(true, new InfoPopup.Payload("Matchmaking", "Cancel", CancelMatch));
+                    InfoPopupPublisher.Publish(
+                        true,
+                        new InfoPopup.Payload("Matchmaking", "Cancel", CancelMatch)
+                    );
                     break;
                 case MatchEvent.Canceled:
                     InfoPopupPublisher.Publish(false, default);

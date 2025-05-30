@@ -1,4 +1,5 @@
-namespace UI {
+namespace UI
+{
     using Cysharp.Threading.Tasks;
     using DG.Tweening;
     using Revel.UI.Util;
@@ -6,8 +7,10 @@ namespace UI {
     using UnityEngine;
     using Utility;
 
-    public class Toast : MonoBehaviour, ObjectPool<Toast>.IPooledObject {
-        [SerializeField, OwnComponent(true)] private TMP_Text _text;
+    public class Toast : MonoBehaviour, ObjectPool<Toast>.IPooledObject
+    {
+        [SerializeField, OwnComponent(true)]
+        private TMP_Text _text;
 
         public float fadeInTime = .25f;
         public float fadeOutTime = .25f;
@@ -17,27 +20,28 @@ namespace UI {
         public float moveTime = 1;
         public AnimationCurve ease = AnimationCurve.Linear(0, 0, 1, 1);
         public float duration = 1;
-        
+
         public ObjectPool<Toast> Pool { get; set; }
 
-        public string Text {
+        public string Text
+        {
             get => _text.text;
             set => _text.text = value;
         }
 
-        private void Awake() {
+        private void Awake()
+        {
             _text = GetComponent<TMP_Text>();
         }
-        
-        public void OnReturn()
+
+        public void OnReturn() { }
+
+        public UniTask ScrollText(string text, Vector2 position)
         {
-        }
-		
-        public UniTask ScrollText(string text, Vector2 position) {
-            RectTransform rectTransform = (RectTransform) transform;
+            RectTransform rectTransform = (RectTransform)transform;
             gameObject.SetActive(true);
             _text.text = text;
-            Vector2 canvasSize = ((RectTransform) _text.canvas.rootCanvas.transform).sizeDelta;
+            Vector2 canvasSize = ((RectTransform)_text.canvas.rootCanvas.transform).sizeDelta;
             Rect textRect = _text.GetPixelAdjustedRect();
             textRect.center = position;
             Vector2 offset = new(
@@ -47,14 +51,18 @@ namespace UI {
             rectTransform.anchoredPosition = position - offset;
             rectTransform.localScale = Vector3.zero;
             DOTween.Kill(this);
-            return DOTween.Sequence().SetId(this)
+            return DOTween
+                .Sequence()
+                .SetId(this)
                 .Append(rectTransform.DOScale(1, moveTime).SetEase(scaleCurve))
                 .Join(rectTransform.DOShakeRotation(moveTime, 45f))
-                .SetEase(ease).ToUniTask();
+                .SetEase(ease)
+                .ToUniTask();
         }
 
-        public void FloatingText(string text, Vector3 position, bool keepInBounds) {
-            var rectTransform = (RectTransform) transform;
+        public void FloatingText(string text, Vector3 position, bool keepInBounds)
+        {
+            var rectTransform = (RectTransform)transform;
             gameObject.SetActive(true);
             _text.text = text;
             var textRect = _text.GetPixelAdjustedRect();
@@ -63,20 +71,26 @@ namespace UI {
             rectTransform.position = position;
             rectTransform.localScale = Vector3.one;
 
-            if(keepInBounds) {
+            if (keepInBounds)
+            {
                 var canvasWidth = ((RectTransform)_text.canvas.rootCanvas.transform).sizeDelta.x;
-                var distRight = canvasWidth - (rectTransform.anchoredPosition.x + rectTransform.rect.width / 2);
+                var distRight =
+                    canvasWidth - (rectTransform.anchoredPosition.x + rectTransform.rect.width / 2);
                 var distLeft = rectTransform.anchoredPosition.x - rectTransform.rect.width / 2;
-                if (distRight < 0) {
+                if (distRight < 0)
+                {
                     rectTransform.anchoredPosition += new Vector2(distRight, 0);
                 }
-                if (distLeft < 0) {
+                if (distLeft < 0)
+                {
                     rectTransform.anchoredPosition += new Vector2(-distLeft, 0);
                 }
             }
 
             DOTween.Complete(this);
-            DOTween.Sequence().SetId(this)
+            DOTween
+                .Sequence()
+                .SetId(this)
                 .Append(_text.DOFade(1, fadeInTime))
                 .Append(rectTransform.DOAnchorPosY(moveDistance, moveTime).SetRelative(true))
                 .Append(_text.DOFade(0, fadeOutTime))
@@ -85,23 +99,28 @@ namespace UI {
                 .OnKill(() => Pool.Return(this));
         }
 
-        public UniTask FloatingText(string text, Vector2 position) {
+        public UniTask FloatingText(string text, Vector2 position)
+        {
             _text.text = text;
-            RectTransform rectTransform = (RectTransform) transform;
+            RectTransform rectTransform = (RectTransform)transform;
             Rect textRect = _text.GetPixelAdjustedRect();
             textRect.center = position;
             _text.color = _text.color.SetAlpha(0);
             rectTransform.anchoredPosition = position;
             rectTransform.localScale = Vector3.one;
-            return DOTween.Sequence().SetId(this)
+            return DOTween
+                .Sequence()
+                .SetId(this)
                 .Append(_text.DOFade(1, fadeInTime))
                 .Append(rectTransform.DOAnchorPosY(moveDistance, moveTime).SetRelative(true))
                 .Append(_text.DOFade(0, fadeOutTime))
-                .SetEase(ease).ToUniTask();
+                .SetEase(ease)
+                .ToUniTask();
         }
 
-        public async UniTask FloatingTextAlternative(string text, Vector2 position) {
-            var rectTransform = (RectTransform) transform;
+        public async UniTask FloatingTextAlternative(string text, Vector2 position)
+        {
+            var rectTransform = (RectTransform)transform;
             gameObject.SetActive(true);
             _text.text = text;
             var textRect = _text.GetPixelAdjustedRect();
@@ -113,7 +132,8 @@ namespace UI {
 
             rectTransform.DOAnchorPosY(moveDistance, moveTime).SetRelative(true).SetEase(ease);
             float t = 0;
-            while (t < 1) {
+            while (t < 1)
+            {
                 t += Time.deltaTime / duration;
                 t = Mathf.Clamp01(t);
                 _text.alpha = fadeCurve.Evaluate(t);
@@ -123,7 +143,8 @@ namespace UI {
             Pool.Return(this);
         }
 
-        private void OnDestroy() {
+        private void OnDestroy()
+        {
             DOTween.Complete(this);
         }
     }

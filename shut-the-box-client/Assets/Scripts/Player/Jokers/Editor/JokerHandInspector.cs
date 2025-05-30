@@ -19,12 +19,13 @@ namespace Player.Jokers.Editor
 
         private void OnSceneGUI()
         {
-            
             Vector3 center = _playerUI.transform.position;
             Handles.color = Color.cyan;
             Vector3 normal = -_playerUI.transform.forward;
             float radius = _playerUI.Radius * _playerUI.CanvasScale;
-            Vector3 start = Quaternion.AngleAxis(_playerUI.StartAngle, -normal) * _playerUI.transform.right + new Vector3(0,radius, 0);
+            Vector3 start =
+                Quaternion.AngleAxis(_playerUI.StartAngle, -normal) * _playerUI.transform.right
+                + new Vector3(0, radius, 0);
             Handles.DrawDottedLine(center, center + start, 3f);
             Handles.DrawWireDisc(center, normal, radius);
 
@@ -32,15 +33,19 @@ namespace Player.Jokers.Editor
             {
                 _transforms[i] = _playerUI.CalculateTransforms(i, _itemCount);
             }
-            
+
             for (int i = 0; i < _transforms.Count; i++)
             {
                 JokerCardUI.Placement placement = _transforms[i];
                 float lineExtent = 10f;
-                Vector3 h1 = placement.Position - placement.Rotation * new Vector3(-lineExtent, 0, 0);
-                Vector3 h2 = placement.Position - placement.Rotation * new Vector3(lineExtent, 0, 0);
-                Vector3 v1 = placement.Position - placement.Rotation * new Vector3(0, -lineExtent, 0);
-                Vector3 v2 = placement.Position - placement.Rotation * new Vector3(0, lineExtent, 0);
+                Vector3 h1 =
+                    placement.Position - placement.Rotation * new Vector3(-lineExtent, 0, 0);
+                Vector3 h2 =
+                    placement.Position - placement.Rotation * new Vector3(lineExtent, 0, 0);
+                Vector3 v1 =
+                    placement.Position - placement.Rotation * new Vector3(0, -lineExtent, 0);
+                Vector3 v2 =
+                    placement.Position - placement.Rotation * new Vector3(0, lineExtent, 0);
                 Vector3 offset = placement.Rotation * new Vector3(lineExtent, lineExtent, 0);
                 Handles.color = Color.red;
                 Handles.DrawLine(h1, h2, 5);

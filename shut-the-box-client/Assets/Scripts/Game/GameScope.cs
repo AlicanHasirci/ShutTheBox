@@ -10,14 +10,14 @@ namespace Game
 
     public class GameScope : LifetimeScope
     {
-        [SerializeField] 
+        [SerializeField]
         private Camera _camera;
-        
+
         protected override void Configure(IContainerBuilder builder)
         {
             string playerId = Parent.Container.Resolve<INetworkService>().PlayerId;
             MatchModel matchModel = Parent.Container.Resolve<IMatchPresenter>().Model;
-            
+
             builder.RegisterInstance(matchModel);
             builder.RegisterComponent(_camera);
             foreach (PlayerModel player in matchModel.Players)

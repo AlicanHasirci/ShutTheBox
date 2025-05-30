@@ -1,10 +1,9 @@
-
 namespace Player
 {
     using System;
     using MessagePipe;
-    using R3;
     using Network;
+    using R3;
 
     public interface ILocalPlayerPresenter : IPlayerPresenter
     {

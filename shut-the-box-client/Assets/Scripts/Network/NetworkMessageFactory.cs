@@ -11,14 +11,14 @@
 //         private readonly ILogger _logger;
 //         private readonly NetworkService _networkService;
 //         private readonly IDisposable _disposable;
-//         
-//          
+//
+//
 //
 //         public NetworkMessageFactory(ILogger logger, NetworkService networkService)
 //         {
 //             _logger = logger;
 //             _networkService = networkService;
-//             
+//
 //             _disposable = DisposableBag.Create(
 //                 Observable
 //                     .FromEvent(

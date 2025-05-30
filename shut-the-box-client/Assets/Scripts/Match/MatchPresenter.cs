@@ -13,14 +13,14 @@ namespace Match
         Searching,
         Canceled,
         Joined,
-        Left
+        Left,
     }
 
     public enum ResultType
     {
         Tie,
         Win,
-        Lose
+        Lose,
     }
 
     public struct MatchResult
@@ -41,7 +41,7 @@ namespace Match
         ISubscriber<MatchResult> OnMatchResult { get; }
         ISubscriber<JokerSelection> OnJokerSelection { get; }
     }
-    
+
     public class MatchPresenter : IMatchPresenter, IDisposable
     {
         public MatchModel Model { get; private set; }
@@ -56,7 +56,11 @@ namespace Match
         private readonly IDisposablePublisher<JokerSelection> _jokerPublisher;
         private readonly IDisposable _disposable;
 
-        public MatchPresenter(INetworkService networkService, IMatchService matchService, EventFactory eventFactory)
+        public MatchPresenter(
+            INetworkService networkService,
+            IMatchService matchService,
+            EventFactory eventFactory
+        )
         {
             _networkService = networkService;
             _matchService = matchService;
@@ -77,7 +81,7 @@ namespace Match
         {
             _disposable?.Dispose();
         }
-        
+
         private void OnMatchStart(MatchStart match)
         {
             Model = new MatchModel
@@ -86,15 +90,20 @@ namespace Match
                 MatchId = _matchService.MatchId,
                 TileCount = match.TileCount,
                 TurnTime = match.TurnTime,
-                RoundId = 0
+                RoundId = 0,
             };
-            
+
             foreach (Player player in match.Players)
             {
-                PlayerModel playerModel = new(player.PlayerId, match.TileCount, player.Rolls.Count, match.RoundCount);
+                PlayerModel playerModel = new(
+                    player.PlayerId,
+                    match.TileCount,
+                    player.Rolls.Count,
+                    match.RoundCount
+                );
                 for (int i = 0; i < playerModel.Tiles.Length; i++)
                 {
-                    playerModel.Tiles[i] = (TileState)player.Tiles[i]; 
+                    playerModel.Tiles[i] = (TileState)player.Tiles[i];
                 }
                 playerModel.Score = player.Score;
                 Model.Players.Add(playerModel);
@@ -140,7 +149,7 @@ namespace Match
             if (result.Player == result.Opponent)
             {
                 result.Type = ResultType.Tie;
-            } 
+            }
             else if (result.Opponent > result.Player)
             {
                 result.Type = ResultType.Lose;

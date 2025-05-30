@@ -2,21 +2,21 @@ namespace Match
 {
     using DG.Tweening;
     using Revel.UI.Util;
+    using TextTween;
     using UnityEngine;
     using UnityEngine.UI;
-    using Random = UnityEngine.Random;
-    using TextTween;
     using Utility;
+    using Random = UnityEngine.Random;
 
     public class WinnerBehaviour : MonoBehaviour
     {
-        [SerializeField] 
+        [SerializeField]
         private Image _background;
 
-        [SerializeField] 
+        [SerializeField]
         private TextTweenManager _tweenManager;
-        
-        [SerializeField] 
+
+        [SerializeField]
         private ParticleSystem[] _fireworks;
 
         private void Awake()
@@ -29,7 +29,7 @@ namespace Match
         public async void OnEnable()
         {
             _tweenManager.Progress = 0;
-            _background.color = _background.color.SetAlpha(0); 
+            _background.color = _background.color.SetAlpha(0);
             await _background.DOFade(.9f, .25f).ToUniTask();
             DOTween.To(() => _tweenManager.Progress, p => _tweenManager.Progress = p, 1, 2f);
             foreach (ParticleSystem firework in _fireworks)

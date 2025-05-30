@@ -18,6 +18,7 @@ namespace App
         public NetworkSettings networkSettings;
         public DebugServices debugServices;
         public JokerDatabase jokerDatabase;
+
         protected override void Configure(IContainerBuilder builder)
         {
             builder.RegisterMessagePipe();
@@ -32,15 +33,21 @@ namespace App
             builder.Register<ISceneController, SceneController>(Lifetime.Singleton);
             builder.Register<IMatchPresenter, MatchPresenter>(Lifetime.Singleton);
             builder.RegisterInstance<IJokerDatabase>(jokerDatabase);
-            
+
             if (debugServices.enabled)
             {
                 builder.RegisterInstance(debugServices.NetworkService).AsImplementedInterfaces();
-                builder.RegisterBuildCallback(resolver => resolver.Inject(debugServices.NetworkService));
+                builder.RegisterBuildCallback(resolver =>
+                    resolver.Inject(debugServices.NetworkService)
+                );
                 builder.RegisterInstance(debugServices.MatchService).AsImplementedInterfaces();
-                builder.RegisterBuildCallback(resolver => resolver.Inject(debugServices.MatchService));
+                builder.RegisterBuildCallback(resolver =>
+                    resolver.Inject(debugServices.MatchService)
+                );
                 builder.RegisterInstance(debugServices.PlayerService).AsImplementedInterfaces();
-                builder.RegisterBuildCallback(resolver => resolver.Inject(debugServices.PlayerService));
+                builder.RegisterBuildCallback(resolver =>
+                    resolver.Inject(debugServices.PlayerService)
+                );
             }
             else
             {
@@ -50,7 +57,9 @@ namespace App
                     .AsImplementedInterfaces()
                     .WithParameter(typeof(INetworkSettings), networkSettings);
                 builder.Register<NetworkMatchService>(Lifetime.Singleton).AsImplementedInterfaces();
-                builder.Register<NetworkPlayerService>(Lifetime.Singleton).AsImplementedInterfaces();
+                builder
+                    .Register<NetworkPlayerService>(Lifetime.Singleton)
+                    .AsImplementedInterfaces();
             }
         }
     }

@@ -1,4 +1,3 @@
-
 namespace Player.Dice
 {
     using System.Linq;
@@ -8,7 +7,7 @@ namespace Player.Dice
     using Sirenix.OdinInspector;
     using UnityEngine;
     using Random = UnityEngine.Random;
-    
+
     public class DiceManager : MonoBehaviour
     {
         [SerializeField]
@@ -120,7 +119,11 @@ namespace Player.Dice
         }
 
         [Button]
-        public async UniTask RollDice(int[] roll, bool skip = false, CancellationToken token = default)
+        public async UniTask RollDice(
+            int[] roll,
+            bool skip = false,
+            CancellationToken token = default
+        )
         {
             if (!_cached)
             {
@@ -133,7 +136,8 @@ namespace Player.Dice
                 _dice[i].Adjust(roll[i]);
             }
 
-            if (skip) return;
+            if (skip)
+                return;
             await Playback(token);
         }
 

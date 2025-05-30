@@ -11,10 +11,10 @@ namespace Player.Jokers
 
     public class JokerSelectionUI : PopupBehaviour<JokerSelection>
     {
-        [SerializeField] 
+        [SerializeField]
         private JokerSelectionBehaviour[] _jokers;
 
-        [Inject] 
+        [Inject]
         public ILocalPlayerPresenter LocalPlayerPresenter;
 
         private IDisposable _subscription;

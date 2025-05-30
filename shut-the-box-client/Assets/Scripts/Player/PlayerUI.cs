@@ -15,13 +15,13 @@ namespace Player
     {
         [SerializeField]
         private TMP_Text _scoreText;
-        
-        [SerializeField] 
+
+        [SerializeField]
         private JokerCardUI _jokerPlayerUI;
-        
+
         [Inject]
         public IJokerDatabase JokerDatabase;
-        
+
         private IDisposable _disposable;
 
         public void Initialize(IPlayerPresenter presenter)
@@ -49,7 +49,11 @@ namespace Player
             JokerCardBehaviour card = _jokerPlayerUI.Get(jokerScore.Type);
             RectTransform rt = (RectTransform)card.transform;
             card.Activate();
-            ToastFactory.Instance.ScoreText(_jokerPlayerUI.transform, rt.anchoredPosition, jokerScore.Score);
+            ToastFactory.Instance.ScoreText(
+                _jokerPlayerUI.transform,
+                rt.anchoredPosition,
+                jokerScore.Score
+            );
         }
 
         private void OnScore(int score)

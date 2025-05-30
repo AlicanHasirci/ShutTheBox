@@ -8,7 +8,11 @@ namespace Player.Jokers
     using UnityEngine;
     using UnityEngine.EventSystems;
 
-    public class JokerCardBehaviour : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler
+    public class JokerCardBehaviour
+        : MonoBehaviour,
+            IPointerDownHandler,
+            IPointerUpHandler,
+            IPointerExitHandler
     {
         [Serializable]
         public struct SizeChange
@@ -17,7 +21,7 @@ namespace Player.Jokers
             public float Duration;
             public Ease Ease;
         }
-        
+
         [Serializable]
         public struct MoveCard
         {
@@ -30,14 +34,27 @@ namespace Player.Jokers
             public Vector3 Punch;
             public float Duration;
         }
-        
-        [SerializeField] private RevelImage _jokerImage;
-        [SerializeField] private TMP_Text _jokerName;
-        [SerializeField] private TMP_Text _jokerDescription;
-        [SerializeField] private SizeChange _shrink;
-        [SerializeField] private SizeChange _enlarge;
-        [SerializeField] private PunchScale _punch;
-        [SerializeField] private MoveCard _move;
+
+        [SerializeField]
+        private RevelImage _jokerImage;
+
+        [SerializeField]
+        private TMP_Text _jokerName;
+
+        [SerializeField]
+        private TMP_Text _jokerDescription;
+
+        [SerializeField]
+        private SizeChange _shrink;
+
+        [SerializeField]
+        private SizeChange _enlarge;
+
+        [SerializeField]
+        private PunchScale _punch;
+
+        [SerializeField]
+        private MoveCard _move;
 
         private JokerModel _model;
         private bool _animating;
@@ -82,7 +99,8 @@ namespace Player.Jokers
 
         public Tween Move(Vector2 position, Quaternion rotation)
         {
-            return DOTween.Sequence()
+            return DOTween
+                .Sequence()
                 .Append(_rectTransform.DOMove(position, _move.Duration))
                 .Join(_rectTransform.DORotateQuaternion(rotation, _move.Duration));
         }
@@ -91,12 +109,12 @@ namespace Player.Jokers
         {
             return ApplySizeChange(_shrink, instant);
         }
-        
+
         public Tween Enlarge(bool instant = false)
         {
             return ApplySizeChange(_enlarge, instant);
         }
-        
+
         private Tween ApplySizeChange(SizeChange sizeChange, bool instant = false)
         {
             if (instant)
@@ -104,7 +122,8 @@ namespace Player.Jokers
                 _rectTransform.sizeDelta = sizeChange.Size;
                 return null;
             }
-            return _rectTransform.DOSizeDelta(sizeChange.Size, sizeChange.Duration, true)
+            return _rectTransform
+                .DOSizeDelta(sizeChange.Size, sizeChange.Duration, true)
                 .SetEase(sizeChange.Ease);
         }
     }

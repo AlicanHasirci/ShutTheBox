@@ -6,8 +6,9 @@ namespace UI
 
     public class ToastFactory : MonoSingleton<ToastFactory>
     {
-        [SerializeField] private Toast _toastPrefab;
-        
+        [SerializeField]
+        private Toast _toastPrefab;
+
         private ObjectPool<Toast> _toastPool;
 
         private void Awake()

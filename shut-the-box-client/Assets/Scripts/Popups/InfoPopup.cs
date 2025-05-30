@@ -28,7 +28,7 @@ namespace Popups
 
         [SerializeField]
         private TMP_Text _button;
-        
+
         [SerializeField]
         private TMP_Text _description;
 

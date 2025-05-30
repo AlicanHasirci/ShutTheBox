@@ -18,13 +18,13 @@ namespace Player.Jokers
             public Quaternion Rotation;
         }
 
-        [Inject] 
+        [Inject]
         public IJokerDatabase JokerDatabase;
 
-        [SerializeField] 
+        [SerializeField]
         private JokerCardBehaviour _cardPrefab;
 
-        [SerializeField] 
+        [SerializeField]
         private Transform _display;
 
         public float StartAngle = 90;
@@ -38,13 +38,13 @@ namespace Player.Jokers
                 if (_canvas == null)
                 {
                     _canvas = GetComponentInParent<Canvas>();
-                } 
+                }
                 return _canvas.scaleFactor;
             }
         }
         private Canvas _canvas;
         private List<JokerCardBehaviour> _cards;
-        
+
         public void Initialize(int count)
         {
             _cards = new List<JokerCardBehaviour>(count);
@@ -54,7 +54,8 @@ namespace Player.Jokers
         {
             foreach (JokerCardBehaviour card in _cards)
             {
-                if (card.Type == joker) return;
+                if (card.Type == joker)
+                    return;
             }
 
             if (instant)
@@ -72,7 +73,8 @@ namespace Player.Jokers
         {
             foreach (JokerCardBehaviour card in _cards)
             {
-                if (card.Type == joker) return card;
+                if (card.Type == joker)
+                    return card;
             }
 
             return null;
@@ -90,20 +92,23 @@ namespace Player.Jokers
             float rad = angle * Mathf.Deg2Rad;
             float radius = Radius * CanvasScale;
             Vector3 fanCenter = transform.position;
-            float x = fanCenter.x
-                      + radius * Mathf.Cos(rad) * transform.right.x
-                      + radius * Mathf.Sin(rad) * transform.up.x;
-            float y = fanCenter.y
-                      + radius * Mathf.Cos(rad) * transform.right.y
-                      + radius * Mathf.Sin(rad) * transform.up.y;
-            float z = fanCenter.z
-                      + radius * Mathf.Cos(rad) * transform.right.z
-                      + radius * Mathf.Sin(rad) * transform.up.z;
+            float x =
+                fanCenter.x
+                + radius * Mathf.Cos(rad) * transform.right.x
+                + radius * Mathf.Sin(rad) * transform.up.x;
+            float y =
+                fanCenter.y
+                + radius * Mathf.Cos(rad) * transform.right.y
+                + radius * Mathf.Sin(rad) * transform.up.y;
+            float z =
+                fanCenter.z
+                + radius * Mathf.Cos(rad) * transform.right.z
+                + radius * Mathf.Sin(rad) * transform.up.z;
             Vector3 position = new(x, y, z);
             return new Placement
             {
                 Position = position,
-                Rotation = Quaternion.AngleAxis(angle - 90, transform.forward)
+                Rotation = Quaternion.AngleAxis(angle - 90, transform.forward),
             };
         }
 
@@ -112,20 +117,22 @@ namespace Player.Jokers
             target.transform.SetParent(transform.parent, true);
             target.transform.SetAsLastSibling();
             DOTween.Kill(target);
-            DOTween.Sequence()
+            DOTween
+                .Sequence()
                 .Join(target.Enlarge())
                 .Join(target.Move(_display.position, Quaternion.identity))
                 .SetId(target);
         }
 
         public void Deselect(JokerCardBehaviour target)
-        {   
+        {
             int index = _cards.IndexOf(target);
             Placement placement = CalculateTransforms(index, _cards.Capacity);
             target.transform.SetParent(transform, true);
             target.transform.SetSiblingIndex(index);
             DOTween.Kill(target);
-            DOTween.Sequence()
+            DOTween
+                .Sequence()
                 .Join(target.Shrink())
                 .Join(target.Move(placement.Position, placement.Rotation))
                 .SetId(target);

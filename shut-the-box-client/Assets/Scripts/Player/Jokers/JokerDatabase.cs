@@ -7,11 +7,11 @@ namespace Player.Jokers
     {
         JokerModel this[Joker joker] { get; }
     }
-    
+
     [CreateAssetMenu(fileName = "JokerDatabase", menuName = "JokerDatabase", order = 0)]
     public class JokerDatabase : ScriptableObject, IJokerDatabase
     {
-        [SerializeField] 
+        [SerializeField]
         private JokerModel[] _jokers;
 
         public JokerModel this[Joker joker]
@@ -20,7 +20,8 @@ namespace Player.Jokers
             {
                 foreach (JokerModel model in _jokers)
                 {
-                    if (model.Type == joker) return model;
+                    if (model.Type == joker)
+                        return model;
                 }
 
                 return default;

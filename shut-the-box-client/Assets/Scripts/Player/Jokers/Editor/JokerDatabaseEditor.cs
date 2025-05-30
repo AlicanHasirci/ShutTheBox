@@ -1,8 +1,8 @@
 namespace Player.Jokers.Editor
 {
     using System;
-    using Network;
     using Jokers;
+    using Network;
     using UnityEditor;
     using Enum = System.Enum;
 
@@ -33,7 +33,7 @@ namespace Player.Jokers.Editor
                         Type = joker,
                         Icon = null,
                         Name = string.Empty,
-                        Description = string.Empty
+                        Description = string.Empty,
                     };
                     changed = true;
                 }

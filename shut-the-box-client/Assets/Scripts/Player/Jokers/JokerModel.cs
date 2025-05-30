@@ -9,7 +9,7 @@ namespace Player.Jokers
     {
         public Joker[] Jokers;
     }
-    
+
     [Serializable]
     public class JokerModel
     {

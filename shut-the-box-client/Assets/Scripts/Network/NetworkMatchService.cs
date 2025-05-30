@@ -19,21 +19,25 @@ namespace Network
         private readonly IDisposablePublisher<MatchStart> _matchStart;
         private readonly IDisposablePublisher<RoundStart> _roundStart;
         private readonly IDisposablePublisher<MatchOver> _matchOver;
-        
+
         private readonly ILogger _logger;
         private readonly NetworkService _service;
         private readonly IDisposable _disposable;
         private IMatchmakerTicket _ticket;
 
-        public NetworkMatchService(ILogger logger, NetworkService networkService, EventFactory eventFactory)
+        public NetworkMatchService(
+            ILogger logger,
+            NetworkService networkService,
+            EventFactory eventFactory
+        )
         {
             _logger = logger;
             _service = networkService;
-            
+
             (_matchStart, OnMatchStart) = eventFactory.CreateEvent<MatchStart>();
             (_roundStart, OnRoundStart) = eventFactory.CreateEvent<RoundStart>();
             (_matchOver, OnMatchOver) = eventFactory.CreateEvent<MatchOver>();
-            
+
             _disposable = DisposableBag.Create(
                 Observable
                     .FromEvent(

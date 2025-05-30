@@ -15,7 +15,7 @@ namespace Debug
     public partial class DebugServices
     {
         public DebugMatchService MatchService;
-        
+
         [Serializable]
         [HideLabel, BoxGroup("Match", VisibleIf = "@serviceType == ServiceType.Match && enabled")]
         public class DebugMatchService : IMatchService, IDisposable
@@ -29,21 +29,21 @@ namespace Debug
             private IDisposablePublisher<MatchStart> MatchStartPublisher { get; set; }
             private IDisposablePublisher<RoundStart> RoundStartPublisher { get; set; }
             private IDisposablePublisher<MatchOver> MatchOverPublisher { get; set; }
-            
+
             private IDisposable _subscription;
-            
+
             [Inject]
             public void Inject(EventFactory eventFactory)
             {
                 (MatchStartPublisher, OnMatchStart) = eventFactory.CreateEvent<MatchStart>();
                 (RoundStartPublisher, OnRoundStart) = eventFactory.CreateEvent<RoundStart>();
                 (MatchOverPublisher, OnMatchOver) = eventFactory.CreateEvent<MatchOver>();
-                
+
                 _subscription = DisposableBag.Create(
                     MatchStartPublisher,
                     RoundStartPublisher,
                     MatchOverPublisher
-                    );
+                );
             }
 
             [Button("Match Start", ButtonStyle.FoldoutButton)]
@@ -54,7 +54,7 @@ namespace Debug
                     RoundCount = 3,
                     RoundId = 0,
                     TileCount = 9,
-                    TurnTime = 0
+                    TurnTime = 0,
                 };
                 foreach (PlayerModel model in MatchModel.Players)
                 {
@@ -81,16 +81,10 @@ namespace Debug
             [Button("Round Start", ButtonStyle.FoldoutButton)]
             public void RoundStartDebug(int roundId, Joker[] jokers)
             {
-                RoundStart rs = new()
-                {
-                    RoundId = roundId,
-                };
+                RoundStart rs = new() { RoundId = roundId };
                 foreach (PlayerModel player in MatchModel.Players)
                 {
-                    JokerChoice jc = new()
-                    {
-                        PlayerId = player.PlayerId,
-                    };
+                    JokerChoice jc = new() { PlayerId = player.PlayerId };
                     jc.Jokers.AddRange(jokers);
                     rs.Choices.Add(jc);
                 }
@@ -103,16 +97,12 @@ namespace Debug
                 MatchOver mo = new();
                 foreach (PlayerModel player in MatchModel.Players)
                 {
-                    PlayerScore pc = new()
-                    {
-                        PlayerId = player.PlayerId,
-                        Score = player.Score,
-                    };
+                    PlayerScore pc = new() { PlayerId = player.PlayerId, Score = player.Score };
                     mo.Scores.Add(pc);
                 }
                 MatchOverPublisher.Publish(mo);
             }
-            
+
             public void StartMatchmaking()
             {
                 Debug.Log("StartMatchmaking");

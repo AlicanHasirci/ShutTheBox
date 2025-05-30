@@ -1,10 +1,9 @@
-
 namespace Player
 {
-    using Network;
     using System;
     using Jokers;
     using MessagePipe;
+    using Network;
     using UnityEngine;
     using DisposableBag = MessagePipe.DisposableBag;
 
@@ -53,9 +52,10 @@ namespace Player
         {
             (BoxPublisher, OnBox) = eventFactory.CreateEvent<TileState[]>();
             (_statePublisher, OnState) = eventFactory.CreateEvent<PlayerState>();
-            (_rollPublisher, OnRoll) = eventFactory.CreateAsyncEvent< (int[], bool)>();
+            (_rollPublisher, OnRoll) = eventFactory.CreateAsyncEvent<(int[], bool)>();
             (_jokerActivatePublisher, OnJokerActivate) = eventFactory.CreateEvent<(Joker, int)>();
-            (_jokerSelectionPublisher, OnJokerSelection) = eventFactory.CreateEvent<JokerSelection>();
+            (_jokerSelectionPublisher, OnJokerSelection) =
+                eventFactory.CreateEvent<JokerSelection>();
             (_jokerSelectPublisher, OnJokerSelect) = eventFactory.CreateEvent<Joker>();
             (_scorePublisher, OnScore) = eventFactory.CreateEvent<int>();
 
@@ -96,7 +96,7 @@ namespace Player
             {
                 Model.Rolls[i] = 0;
             }
-            
+
             for (var i = 0; i < Model.Tiles.Length; i++)
             {
                 Model.Tiles[i] = TileState.Open;
@@ -130,7 +130,7 @@ namespace Player
                 }
             }
         }
-        
+
         private void OnPlayerJoker(JokerSelect jokerSelect)
         {
             if (!IsCurrentPlayer(jokerSelect.PlayerId))
@@ -160,7 +160,7 @@ namespace Player
             {
                 Model.Rolls[i] = playerRoll.Rolls[i];
             }
-            
+
             await _rollPublisher.PublishAsync((Model.Rolls, false));
             SetState(HasMoves() ? PlayerState.Play : PlayerState.Fail);
         }
@@ -208,12 +208,14 @@ namespace Player
         {
             return string.Equals(playerId, Model.PlayerId);
         }
-        
-        private bool HasMoves() {
+
+        private bool HasMoves()
+        {
             return CanMakeSum(Model.TotalRoll);
         }
-         
-        private bool CanMakeSum(int target, int index = 0) {
+
+        private bool CanMakeSum(int target, int index = 0)
+        {
             if (target == 0)
             {
                 return true;
@@ -224,7 +226,8 @@ namespace Player
             }
             int next = index + 1;
             int value = index + 1;
-            return (Model.Tiles[index] is TileState.Open && CanMakeSum(target - value, next)) || CanMakeSum(target, next);
+            return (Model.Tiles[index] is TileState.Open && CanMakeSum(target - value, next))
+                || CanMakeSum(target, next);
         }
 
         protected void SetState(PlayerState state)

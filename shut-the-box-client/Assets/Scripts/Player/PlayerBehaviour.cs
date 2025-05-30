@@ -2,10 +2,10 @@ namespace Player
 {
     using System;
     using System.Threading;
-    using Cysharp.Threading.Tasks;
-    using MessagePipe;
     using Box;
+    using Cysharp.Threading.Tasks;
     using Dice;
+    using MessagePipe;
     using R3;
     using UnityEngine;
     using DisposableBag = MessagePipe.DisposableBag;
@@ -17,7 +17,7 @@ namespace Player
 
         [SerializeField]
         private DiceManager _diceManager;
-        
+
         private IPlayerPresenter _presenter;
         private IDisposable _disposable;
 
@@ -40,7 +40,10 @@ namespace Player
             _diceManager.CacheRollData();
         }
 
-        private async UniTask OnPlayerRoll((int[] rolls, bool skip) roll, CancellationToken token = default)
+        private async UniTask OnPlayerRoll(
+            (int[] rolls, bool skip) roll,
+            CancellationToken token = default
+        )
         {
             await _diceManager.RollDice(_presenter.Model.Rolls, roll.skip, token);
         }

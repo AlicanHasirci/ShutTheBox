@@ -64,7 +64,7 @@ namespace Main
         {
             _popupManager.Show<InfoPopup, InfoPopup.Payload>(payload);
         }
-        
+
         private void HideInfoPopup(InfoPopup.Payload payload)
         {
             _popupManager.Hide<InfoPopup>();
